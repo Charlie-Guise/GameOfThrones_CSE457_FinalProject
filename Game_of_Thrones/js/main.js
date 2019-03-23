@@ -10,14 +10,19 @@ loadData();
 
 function loadData() {
 	// Load the 3 CSV files into the app
-
-	createVis();
+	d3.queue()
+		.defer(d3.csv, "data/battles.csv")
+		.defer(d3.csv, "data/character-deaths.csv")
+		.defer(d3.csv, "data/character-predictions.csv")
+		.await(createVis)
 
 }
 
 
-function createVis() {
-
-  // TO-DO: INSTANTIATE VISUALIZATION
-	var map = new GameOfThronesMap("map");
+function createVis(error, battles, deaths, predictions) {
+	if(error) {
+		console.log(error);
+	}
+  	// TO-DO: INSTANTIATE VISUALIZATION
+	var map = new GameOfThronesMap("map", battles, deaths, predictions);
 }

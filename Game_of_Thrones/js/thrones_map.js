@@ -5,9 +5,12 @@
  *  @param _data            -- Array with all stations of the bike-sharing network
  */
 
-GameOfThronesMap = function(_parentElement) {
+GameOfThronesMap = function(_parentElement, _battles, _deaths, _predictions) {
 
 	this.parentElement = _parentElement;
+	this.battles = _battles;
+	this.deaths = _deaths;
+	this.predictions = _predictions;
 	this.initVis();
 }
 
@@ -18,9 +21,10 @@ GameOfThronesMap = function(_parentElement) {
 
 GameOfThronesMap.prototype.initVis = function() {
 	var vis = this;
+	console.log(vis);
 	var map = L.map('GoT-map', {
 	  center: [ 5, 20 ],
-	  zoom: 4,
+	  zoom: 5,
 	  maxZoom: 8,
 	  minZoom: 4,
 	  maxBounds: [ [ 50, -30 ], [ -45, 100 ] ]
