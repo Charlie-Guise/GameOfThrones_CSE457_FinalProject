@@ -1,6 +1,4 @@
 
-var allData = [];
-
 // Variable for the visualization instance
 var GameOfThronesMap;
 
@@ -25,4 +23,8 @@ function createVis(error, battles, deaths, predictions) {
 	}
   	// TO-DO: INSTANTIATE VISUALIZATION
 	var map = new GameOfThronesMap("map", battles, deaths, predictions);
+	// var map = new GameOfThronesMap();
+	d3.json("kingdomBorders.json", function(error, data) {
+		map.addKingdoms(data);
+	});
 }
