@@ -17,12 +17,21 @@
   <div class="container-fluid">
 
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12" id="mapCol">
         <!-- Visualization placeholders -->
 		<div id="GoT-map">
         	<div id="map"></div>
+			<div class="button-wrapper">
+				<div class="leaflet-top leaflet-right" >
+					<input type="button" name="button" value="button" id="button-menu" onclick="toggleMenu()">
+				</div>
+			</div>
 		</div>
       </div>
+	  <div class="col-md-6" id="panel">
+	  	<div class="menuPanel" id="menuPanelId">
+	  	</div>
+	  </div>
     </div>
 
   </div>
@@ -35,7 +44,11 @@
   <script src="js/d3.min.js"></script>
 
   <!-- Visualization objects -->
+  <script src="js/MovingMarker.js"></script>
   <script src="js/thrones_map.js"></script>
+  <script src="js/menuPanel.js"></script>
+
+  </script>
 
   <!-- Load data, create visualizations -->
   <script src="js/main.js"></script>
