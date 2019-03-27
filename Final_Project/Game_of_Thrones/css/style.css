@@ -1,0 +1,42 @@
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+#GoT-map {
+   width: 100%;
+   height: 850px;
+   position: relative;
+}
+
+#map {
+	width: 100%;
+	height: 100%;
+}
+
+.button-wrapper {
+	z-index: 100;
+}
+.row div {
+	/* https://stackoverflow.com/questions/12520751/animate-bootstrap-columns */
+	-webkit-transition: width 0.5s ease, margin 0.5s ease;
+	-moz-transition: width 0.5s ease, margin 0.5s ease;
+	-o-transition: width 0.5s ease, margin 0.5s ease;
+	transition: width 0.5s ease, margin 0.5s ease;
+}
+
+#panel {
+	display: none;
+	background-color: #524f4f;
+}
+
+#toggleScreenButton {
+	pointer-events: auto;
+	background-color: #524f4f;
+	border: none;
+	color: white;
+	padding: 16px 32px;
+	text-decoration: none;
+	margin: 4px 2px;
+}
