@@ -24,7 +24,7 @@ function createVis(error, battles, deaths, predictions) {
 	console.log(houses);
   	// TO-DO: INSTANTIATE VISUALIZATION
 	var map = new GameOfThronesMap("map", battles, deaths, predictions);
-	var menuPanel = new MenuPanel("menuPanelId", houses);
+	var menuPanel = new MenuPanel("menuPanelId", houses, null);
 
 
 
@@ -67,7 +67,6 @@ function createHouses(deaths){
 
 
 function toggleMenu(){
-
 	if(fullScreen){
 		var panel = document.getElementById('panel').style.display = 'inline-block';
 		var map = document.getElementById('mapCol');
@@ -80,6 +79,19 @@ function toggleMenu(){
 		map.className = "col-md-12";
 		fullScreen = true;
 	}
+}
 
-
+function toggleMenuFromMap(kingdom){
+	if(fullScreen || (kingdom != "")){
+		var panel = document.getElementById('panel').style.display = 'inline-block';
+		var map = document.getElementById('mapCol');
+		map.className = "col-md-6";
+		fullScreen = false;
+	}
+	else {
+		var panel = document.getElementById('panel').style.display = 'none';
+		var map = document.getElementById('mapCol');
+		map.className = "col-md-12";
+		fullScreen = true;
+	}
 }

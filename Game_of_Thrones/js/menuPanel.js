@@ -2,10 +2,11 @@
  * Constructor for the Game of Thrones Map
 
  */
-function MenuPanel(parentElement, houses){
+function MenuPanel(parentElement, houses, currentHouse){
 	var vis = this;
 	vis.parentElement = parentElement;
 	vis.houses = houses;
+	vis.currentHouse = currentHouse;
 	vis.init();
 };
 
@@ -48,7 +49,7 @@ MenuPanel.prototype.wrangleData = function() {
 
 MenuPanel.prototype.update = function() {
 	var vis = this;
-	console.log(vis);
+	// console.log(vis);
 	// vis.svg.selectAll("div").remove().exit().data(vis.houses[1].Names).enter()
 	// 		.append("div")
 	// 			.attr("class", function(d, index){

@@ -68,8 +68,14 @@ GameOfThronesMap.prototype.setHighlightedRegion = function(layer) {
 	if (vis.selected) { // if there is a highlighed region, unhighlight it
 		vis.layers.kingdom.resetStyle(vis.selected);
 	}
-
 	vis.selected = layer;
+
+	if(vis.prevKingdom == layer){ // If you click on the same region
+		vis.layers.kingdom.resetStyle(vis.prevKingdom);
+		vis.selected = null;
+	}
+
+	vis.prevKingdom = layer;
 	if (vis.selected) {
 		vis.selected.bringToFront();
 		vis.selected.setStyle({color: 'blue'});
@@ -85,6 +91,9 @@ GameOfThronesMap.prototype.onEachKingdom = function(feature, layer) {
 			const kingdom = feature.properties.kingdom;
 			console.log(kingdom);
 			vis.setHighlightedRegion(layer);
+			toggleMenuFromMap(kingdom);
+			// FIXME: Then I need to update what's on the menu screen(?)
+			var updatedPanel = new MenuPanel("menuPanelId", createHouses(vis.deaths), kingdom);
 		}
 	});
 };
