@@ -53,10 +53,12 @@ MenuPanel.prototype.update = function() {
 	// console.log(JSON.stringify(vis.houses));
 	var sigilGroup = vis.svg.append("g").attr("class", "sigils");
 
+	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
+
 	sigilGroup.selectAll('image').remove().exit().data(vis.houses).enter() // FIXME: The issue here is that .data cannot take in an map
 		.append('image')
-		.attr("xlink:href",function(d){
-			return d.sigil;
+		.attr("xlink:href",function(d, index){
+			return "./css/houseSigils/" + sigils[index] + ".jpg";
 		})
 		.attr("width", 200)
 		.attr("height", 150)
@@ -84,5 +86,9 @@ MenuPanel.prototype.update = function() {
 			if((i%4) == 3){
 				return 660;
 			}
+		})
+		.on('click', function(d){
+			console.log("click");
+			console.log(d);
 		});
 };

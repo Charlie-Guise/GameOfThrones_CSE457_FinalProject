@@ -55,31 +55,6 @@ function createHouses(deaths){
 		// sigils[deaths[i].Allegiances].push(deaths[i]);
 	}
 	console.log(sigils);
-	// for(var i = 0; i < deaths.length; i++){
-	// 	if(houses.has(deaths[i].Allegiances)) {
-	// 		// if the name already exists
-	// 		// Add the filepath for their sigil
-	// 		if(deaths[i].Allegiances == "Night's Watch"){
-	// 			deaths[i].sigil = "../css/houseSigils/NightsWatch.jpg";
-	// 		}
-	// 		else {
-	// 			deaths[i].sigil = "../css/houseSigils/" + deaths[i].Allegiances + ".jpg";
-	// 		}
-	// 		var current = houses.get(deaths[i].Allegiances);
-	// 		current.push(deaths[i]);
-	// 		houses.set(deaths[i].Allegiances, current);
-	// 	}
-	// 	else {
-	// 		if(deaths[i].Allegiances == "Night's Watch"){
-	// 			deaths[i].sigil = "../css/houseSigils/NightsWatch.jpg";
-	// 		}
-	// 		else {
-	// 			deaths[i].sigil = "../css/houseSigils/" + deaths[i].Allegiances + ".jpg";
-	// 		}
-	// 		var current = [deaths[i]];
-	// 		houses.set(deaths[i].Allegiances, current);
-	// 	}
-	// }
 	return sigils;
 }
 
