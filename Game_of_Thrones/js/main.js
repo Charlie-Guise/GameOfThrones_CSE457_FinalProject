@@ -5,6 +5,8 @@ var GameOfThronesMap;
 // Start application by loading the data
 loadData();
 var fullScreen = true;
+var menuPanel;
+var houses = [];
 
 function loadData() {
 	// Load the 3 CSV files into the app
@@ -20,11 +22,10 @@ function createVis(error, battles, deaths, predictions) {
 	if(error) {
 		console.log(error);
 	}
-	var houses = createHouses(deaths);
-	console.log(houses);
-  	// TO-DO: INSTANTIATE VISUALIZATION
-	var map = new GameOfThronesMap("map", battles, deaths, predictions);
-	var menuPanel = new MenuPanel("menuPanelId", houses, null);
+	houses = createHouses(deaths);
+  	// INSTANTIATE VISUALIZATION
+	var map = new GameOfThronesMap("map", battles, deaths, predictions, menuPanel);
+	menuPanel = new MenuPanel("menuPanelId", houses, null, map);
 
 
 
@@ -34,35 +35,26 @@ function createVis(error, battles, deaths, predictions) {
 }
 
 function createHouses(deaths){
+	var sigils = [{"None": []}, {"Lannister": []}, {"Targaryen": []}, {"Greyjoy": []}, {"Baratheon": []}, {"Night's Watch": []}, {"Arryn": []}, {"Stark": []}, {"Tyrell": []}, {"Martell": []}, {"Wildling": []}, {"Tully": []}];
 
-	var houses = new Map();
-	var houseNames = [];
 	for(var i = 0; i < deaths.length; i++){
-		if(houses.has(deaths[i].Allegiances)) {
-			// if the name already exists
-			// Add the filepath for their sigil
-			if(deaths[i].Allegiances == "Night's Watch"){
-				deaths[i].sigil = "../css/houseSigils/NightsWatch.jpg";
-			}
-			else {
-				deaths[i].sigil = "../css/houseSigils/" + deaths[i].Allegiances + ".jpg";
-			}
-			var current = houses.get(deaths[i].Allegiances);
-			current.push(deaths[i]);
-			houses.set(deaths[i].Allegiances, current);
+		if(deaths[i].Allegiances == "Night's Watch"){
+			deaths[i].sigil = "css/houseSigils/NightsWatch.jpg";
 		}
 		else {
-			if(deaths[i].Allegiances == "Night's Watch"){
-				deaths[i].sigil = "../css/houseSigils/NightsWatch.jpg";
-			}
-			else {
-				deaths[i].sigil = "../css/houseSigils/" + deaths[i].Allegiances + ".jpg";
-			}
-			var current = [deaths[i]];
-			houses.set(deaths[i].Allegiances, current);
+			deaths[i].sigil = "css/houseSigils/" + deaths[i].Allegiances + ".jpg";
 		}
+		for(var j = 0; j < sigils.length; j++){
+			var currentSigil = Object.keys(sigils[j]);
+			if(deaths[i].Allegiances == currentSigil){
+				var ind = deaths[i].Allegiances;
+				sigils[j][ind].push(deaths[i]);
+			}
+		}
+		// sigils[deaths[i].Allegiances].push(deaths[i]);
 	}
-	return houses;
+	console.log(sigils);
+	return sigils;
 }
 
 
