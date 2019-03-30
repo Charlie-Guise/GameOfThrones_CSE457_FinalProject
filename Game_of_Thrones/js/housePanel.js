@@ -2,22 +2,23 @@
  *  This file will create all the visualizations related to a single
  *	house. It will overlay the menuPanel
  */
-function HousePanel(house, houseName){
+function HousePanel(house, houseName, menuPanel){
 	var vis = this;
 	vis.house = house;
 	vis.houseName = houseName;
+	vis.menuPanel = menuPanel;
 	vis.init();
 }
 
 
 HousePanel.prototype.init = function(){
 	var vis = this;
-	console.log(vis.house);
 	vis.svgHeight = 850;
 	vis.svg = d3.select("#housePanelId").append("svg")
 					.attr("id", "svg-menu")
 					.attr("height", vis.svgHeight)
 					.attr("width", "100%");
+
 	vis.wrangleData();
 }
 
@@ -69,16 +70,32 @@ HousePanel.prototype.updateVis = function(){
 		})
 		.attr("width", 50)
 		.attr("height", function(d){
-			console.log(500 - deathScale(d));
 			return 500 - deathScale(d);
 		})
 		.attr("fill", function(d){
 			return "red";
 		});
 	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(250,800)").call(xAxis);
-
 	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(250,300)").call(yAxis);
 
+	// Button to go back
+	var backButton = vis.svg.append("g").attr("id", "backButton");
+	backButton.append("rect")
+			.attr("x", 30)
+			.attr("y", 30)
+			.attr("width", 50)
+			.attr("height", 30)
+			.attr("fill","#0f1113")
+			.on("click", function(){
+				d3.select("#housePanelId").style("display", "none");
+				d3.select("#menuPanelId").style("display", "inline");
+				vis.menuPanel.layerGroup.clearLayers();
+
+			});
+	backButton.append("text").text("Back")
+			.attr("x", 65)
+			.attr("y", 50)
+			.attr("fill", "white");
 
 
 

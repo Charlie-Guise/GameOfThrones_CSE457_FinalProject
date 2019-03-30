@@ -2,10 +2,11 @@
  * Constructor for the Game of Thrones Map
 
  */
-function MenuPanel(parentElement, houses, currentHouse, map){
+function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
 	var vis = this;
 	vis.parentElement = parentElement;
 	vis.houses = houses;
+	vis.houseBattles = houseBattles;
 	vis.currentHouse = currentHouse;
 	vis.map = map;
 	vis.init();
@@ -91,16 +92,22 @@ MenuPanel.prototype.update = function() {
 			}
 		})
 		.on('click', function(d, i){
-			// The onClick function should reveal information on the map
-			// var mapLayers = vis.map.layers.kingdom._layers;
-			// if(layerIndex[i] != null){
-			// 	var houseIndex = layerIndex[i];
-			// 	console.log("layer passed: " + mapLayers[houseIndex]);
-			// 	vis.map.setHighlightedRegion(mapLayers[houseIndex]);
-			// }
 			d3.select("#menuPanelId").style("display", "none");
-			vis.housePanel = new HousePanel(d, sigils[i]);
-			console.log("click");
+			d3.select("#housePanelId").style("display", "inline");
+			//set the markers
+			var currentName = sigils[i];
+			var currentBattles = vis.houseBattles[i][currentName];
+			vis.layerGroup = L.layerGroup().addTo(vis.map.map);
+
+			for(var i = 0; i < currentBattles.length; i++) {
+				var currentLat = parseFloat(currentBattles[i].lat);
+				var currentLong = parseFloat(currentBattles[i].long);
+				vis.marker = new L.marker([currentLat,currentLong])
+								.bindPopup(currentBattles[i].name)
+								.addTo(vis.layerGroup);
+			}
 			console.log(d);
+			console.log(currentName);
+			vis.housePanel = new HousePanel(d, currentName, vis);
 		});
 };
