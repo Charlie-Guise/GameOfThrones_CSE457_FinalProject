@@ -112,7 +112,7 @@ MenuPanel.prototype.update = function() {
 		.append("text")
 		.text(function(d, i){
 			console.log(d);
-			if((sigils[i] != "Wildling") && (sigils[i] != "Night's Watch")){
+			if((sigils[i] != "Wildling") && (sigils[i] != "Night's Watch") && (sigils[i] != "None")){
 				return "House " + sigils[i];
 			}
 			else {
@@ -144,6 +144,6 @@ MenuPanel.prototype.update = function() {
 				return 660;
 			}
 		})
-		.style("font-size", 28)
-		.style("font", 'MedievalSharp');
+		.style("font-size", 18)
+		.style("font-family", 'Game of Thrones');
 };
