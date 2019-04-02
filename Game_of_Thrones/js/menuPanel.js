@@ -92,6 +92,7 @@ MenuPanel.prototype.update = function() {
 			//set the markers
 			var currentName = sigils[i];
 			var currentBattles = vis.houseBattles[i][currentName];
+			console.log(currentBattles);
 			var icon = L.icon({
 			    iconUrl: 'css/images/sword.png',
 			    iconSize: [15, 30], // size of the icon
@@ -102,7 +103,7 @@ MenuPanel.prototype.update = function() {
 				var currentLat = parseFloat(currentBattles[i].lat);
 				var currentLong = parseFloat(currentBattles[i].long);
 				vis.marker = new L.marker([currentLat,currentLong], {icon: icon})
-								.bindPopup(currentBattles[i].name)
+								.bindPopup(renderPopup(currentBattles[i]))
 								.addTo(vis.layerGroup);
 			}
 			vis.housePanel = new HousePanel(d, currentName, vis);
@@ -147,3 +148,19 @@ MenuPanel.prototype.update = function() {
 		.style("font-size", 18)
 		.style("font-family", 'Game of Thrones');
 };
+
+function renderPopup(currentBattle){
+	// FIXME: Make this look better lol
+	console.log(currentBattle);
+	var name = currentBattle.name;
+	var attacker = currentBattle.attacker_1;
+	var defender = currentBattle.defender_1;
+	var attacker_commander = currentBattle.attacker_commander;
+	var defender_commander = currentBattle.defender_commander;
+	var region = currentBattle.region;
+	var attacker_size = currentBattle.attacker_size;
+	var defender_size = currentBattle.defender_size;
+	var attacker_outcome = currentBattle.attacker_outcome;
+	var winner = (attacker_outcome == "win") ? attacker : defender;
+	return "<strong>" + name + "</strong><br>Attacker: " + attacker + "<br>Attacking Commander: " + attacker_commander + "<br>Attacking Army Size: "+ attacker_size + "<br>Defender: " + defender + "<br>Defending Commander: " + defender_commander + "<br>Defending Army Size: " + attacker_size + "<br>Battle Winner: " + winner;
+}
