@@ -53,7 +53,6 @@ function createHouses(deaths, battles){
 	}
 
 	var houses = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Mance", "Tully"];
-	console.log(battles);
 	houseBattles = [{"None": []}, {"Lannister": []}, {"Targaryen": []}, {"Greyjoy": []}, {"Baratheon": []}, {"Night's Watch": []}, {"Arryn": []}, {"Stark": []}, {"Tyrell": []}, {"Martell": []}, {"Wildling": []}, {"Tully": []}];
 
 	for (var k = 0; k < houses.length; ++k){
@@ -107,7 +106,6 @@ function createHouses(deaths, battles){
 
 		}
 	}
-	console.log(houseBattles);
 	return sigils;
 }
 

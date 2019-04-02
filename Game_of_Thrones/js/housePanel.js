@@ -44,20 +44,20 @@ HousePanel.prototype.wrangleData = function(){
 	var vis = this;
 	vis.deathsByYear = [];
 
-	vis.deathCount = [0, 0, 0, 0];
+	vis.deathCount = [0, 0, 0, 0, 0];
 	for(var i = 0; i < vis.house[vis.houseName].length; i++){
 		var death = vis.house[vis.houseName][i]['Death Year'];
 		if (death == 297){
-			vis.deathCount[0] += 1;
-		}
-		else if (death == 298){
 			vis.deathCount[1] += 1;
 		}
-		else if (death == 299){
+		else if (death == 298){
 			vis.deathCount[2] += 1;
 		}
-		else if (death == 300){
+		else if (death == 299){
 			vis.deathCount[3] += 1;
+		}
+		else if (death == 300){
+			vis.deathCount[4] += 1;
 		}
 	}
 	vis.updateVis();
@@ -68,31 +68,33 @@ HousePanel.prototype.updateVis = function(){
 
 	var deathScale = d3.scaleLinear()
 						.domain([0, d3.max(vis.deathCount)])
-						.range([499, 0]);
+						.range([399, 0]);
 	var xScale = d3.scaleLinear()
 						.domain([297, 300])
-						.range([0, 400]);
+						.range([0, 300]);
 
 	// Create Line chart
 	var xAxis = d3.axisBottom().scale(xScale).ticks(4);
 	var yAxis = d3.axisLeft().scale(deathScale);
 
 	//Create the visualizations (Bar Chart of Deaths)
+	console.log(vis.deathCount);
 	vis.svg.selectAll("rect").data(vis.deathCount).enter()
 		.append("rect")
 		.attr("x", function(d, i){
-			return 250 + xScale(i + 297);
+			console.log(i);
+			return -50 + xScale(i + 297);
 		})
 		.attr("y", function(d, i){
-			return 800 - (500 - deathScale(d));
+			return 800 - (400 - deathScale(d));
 		})
 		.attr("width", 50)
 		.attr("height", function(d){
-			return 500 - deathScale(d);
+			return 400 - deathScale(d);
 		})
 		.attr("fill", function(d){
 			return "red";
 		});
-	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(250,800)").call(xAxis);
-	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(250,300)").call(yAxis);
+	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(75,800)").call(xAxis);
+	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(50,400)").call(yAxis);
 }

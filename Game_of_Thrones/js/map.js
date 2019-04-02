@@ -18,20 +18,6 @@ GameOfThronesMap = function(_parent){
 
 GameOfThronesMap.prototype.init = function() {
 	var self = this;
-	console.log(self);
-	// self.margin = {top:10, right:10, left:10, bottom:10};
-
-	// var mapDiv = d3.select("#map-container");
-
-	//Gets access to the div element created for this chart from HTML
-	// self.svgBounds = mapDiv.node().getBoundingClientRect();
-	// self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-	// self.svgHeight = '100%';
-	//
-	// //creates svg element within the div
-	// self.svg = mapDiv.append("svg")
-	// .attr("width",self.svgWidth)
-	// .attr("height",self.svgHeight)
 
 	// Initialize our map
 	self.map = L.map(self.parent.children[0], {

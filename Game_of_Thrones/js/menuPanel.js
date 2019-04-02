@@ -8,7 +8,23 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
 	vis.houses = houses;
 	vis.houseBattles = houseBattles;
 	vis.currentHouse = currentHouse;
+	vis.houseMain = [
+		{"None": ["Davos Seaworth", "Samewell Tarly", "Bron"]},
+		{"Lannister": ["Joffrey Lannister", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
+		{"Targaryen": ["Daenerys Targaryen", "Jorah Mormont"]},
+		{"Greyjoy": ["Theon Greyjoy"]},
+		{"Baratheon": ["Robert Baratheon", "Stannis Baratheon", "Renly Baratheon"]},
+		{"Night's Watch": ["Jon Snow"]},
+		{"Arryn": []},
+		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Rob Stark", "Arya Stark"]},
+		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]},
+		{"Martell": []},
+		{"Wildling": ["Mance Rayder"]},
+		{"Tully": []}
+
+	];
 	vis.map = map;
+	console.log(vis);
 	vis.init();
 };
 
@@ -95,7 +111,6 @@ MenuPanel.prototype.update = function() {
 			//set the markers
 			var currentName = sigils[i];
 			var currentBattles = vis.houseBattles[i][currentName];
-			console.log(currentBattles);
 			var icon = L.icon({
 			    iconUrl: 'css/images/sword.png',
 			    iconSize: [15, 30], // size of the icon
@@ -115,7 +130,6 @@ MenuPanel.prototype.update = function() {
 	sigilGroup.selectAll("text").remove().exit().data(vis.houses).enter()
 		.append("text")
 		.text(function(d, i){
-			console.log(d);
 			if((sigils[i] != "Wildling") && (sigils[i] != "NightsWatch") && (sigils[i] != "None")){
 				return "House " + sigils[i];
 			}
@@ -154,7 +168,6 @@ MenuPanel.prototype.update = function() {
 
 function renderPopup(currentBattle){
 	// FIXME: Make this look better lol
-	console.log(currentBattle);
 	var name = currentBattle.name;
 	var attacker = currentBattle.attacker_1;
 	var defender = currentBattle.defender_1;
