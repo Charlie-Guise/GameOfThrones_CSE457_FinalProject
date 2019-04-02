@@ -52,7 +52,7 @@ function createHouses(deaths, battles){
 		}
 	}
 
-	var houses = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
+	var houses = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Mance", "Tully"];
 	console.log(battles);
 	houseBattles = [{"None": []}, {"Lannister": []}, {"Targaryen": []}, {"Greyjoy": []}, {"Baratheon": []}, {"Night's Watch": []}, {"Arryn": []}, {"Stark": []}, {"Tyrell": []}, {"Martell": []}, {"Wildling": []}, {"Tully": []}];
 
@@ -95,6 +95,10 @@ function createHouses(deaths, battles){
 			}
 			else if (battles[j].defender_king.includes(house)){
 				include = 1;
+			}
+
+			if (battles[j].defender_king == "Mance Rayder" && house == "Mance"){
+				house = "Wildling";
 			}
 
 			if (include == 1){
