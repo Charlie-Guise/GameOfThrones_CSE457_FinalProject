@@ -52,6 +52,7 @@ MenuPanel.prototype.wrangleData = function() {
 
 MenuPanel.prototype.update = function() {
 	var vis = this;
+	vis.svg.append("text").text("Houses of Westeros").attr("x", 100).attr("y", 75).style("font-size", 48).style("font-family", "Game of Thrones");
 	var sigilGroup = vis.svg.append("g").attr("class", "sigils");
 	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
 	sigilGroup.selectAll('image').remove().exit().data(vis.houses).enter()
@@ -74,18 +75,20 @@ MenuPanel.prototype.update = function() {
 		})
 		.attr("y", function(d, i){
 			if((i%4) == 0){
-				return 150;
+				return 250;
 			}
 			if((i%4) == 1){
-				return 320;
+				return 400;
 			}
 			if((i%4) == 2){
-				return 490;
+				return 550;
 			}
 			if((i%4) == 3){
-				return 660;
+				return 700;
 			}
 		})
+		.attr("width", 150)
+		.attr("height", 115)
 		.on('click', function(d, i){
 			d3.select("#menuPanelId").style("display", "none");
 			d3.select("#housePanelId").style("display", "inline");
@@ -113,7 +116,7 @@ MenuPanel.prototype.update = function() {
 		.append("text")
 		.text(function(d, i){
 			console.log(d);
-			if((sigils[i] != "Wildling") && (sigils[i] != "Night's Watch") && (sigils[i] != "None")){
+			if((sigils[i] != "Wildling") && (sigils[i] != "NightsWatch") && (sigils[i] != "None")){
 				return "House " + sigils[i];
 			}
 			else {
@@ -133,16 +136,16 @@ MenuPanel.prototype.update = function() {
 		})
 		.attr("y", function(d, i){
 			if((i%4) == 0){
-				return 150;
+				return 245;
 			}
 			if((i%4) == 1){
-				return 320;
+				return 395;
 			}
 			if((i%4) == 2){
-				return 490;
+				return 545;
 			}
 			if((i%4) == 3){
-				return 660;
+				return 695;
 			}
 		})
 		.style("font-size", 18)
