@@ -52,6 +52,7 @@ MenuPanel.prototype.wrangleData = function() {
 
 MenuPanel.prototype.update = function() {
 	var vis = this;
+	vis.svg.append("text").text("Houses of Westeros").attr("x", 100).attr("y", 75).style("font-size", 48).style("font-family", "Game of Thrones");
 	var sigilGroup = vis.svg.append("g").attr("class", "sigils");
 	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
 	sigilGroup.selectAll('image').remove().exit().data(vis.houses).enter()
@@ -74,24 +75,27 @@ MenuPanel.prototype.update = function() {
 		})
 		.attr("y", function(d, i){
 			if((i%4) == 0){
-				return 150;
+				return 250;
 			}
 			if((i%4) == 1){
-				return 320;
+				return 400;
 			}
 			if((i%4) == 2){
-				return 490;
+				return 550;
 			}
 			if((i%4) == 3){
-				return 660;
+				return 700;
 			}
 		})
+		.attr("width", 150)
+		.attr("height", 115)
 		.on('click', function(d, i){
 			d3.select("#menuPanelId").style("display", "none");
 			d3.select("#housePanelId").style("display", "inline");
 			//set the markers
 			var currentName = sigils[i];
 			var currentBattles = vis.houseBattles[i][currentName];
+			console.log(currentBattles);
 			var icon = L.icon({
 			    iconUrl: 'css/images/sword.png',
 			    iconSize: [15, 30], // size of the icon
@@ -102,7 +106,7 @@ MenuPanel.prototype.update = function() {
 				var currentLat = parseFloat(currentBattles[i].lat);
 				var currentLong = parseFloat(currentBattles[i].long);
 				vis.marker = new L.marker([currentLat,currentLong], {icon: icon})
-								.bindPopup(currentBattles[i].name)
+								.bindPopup(renderPopup(currentBattles[i]))
 								.addTo(vis.layerGroup);
 			}
 			vis.housePanel = new HousePanel(d, currentName, vis);
@@ -112,7 +116,7 @@ MenuPanel.prototype.update = function() {
 		.append("text")
 		.text(function(d, i){
 			console.log(d);
-			if((sigils[i] != "Wildling") && (sigils[i] != "Night's Watch")){
+			if((sigils[i] != "Wildling") && (sigils[i] != "NightsWatch") && (sigils[i] != "None")){
 				return "House " + sigils[i];
 			}
 			else {
@@ -132,18 +136,34 @@ MenuPanel.prototype.update = function() {
 		})
 		.attr("y", function(d, i){
 			if((i%4) == 0){
-				return 150;
+				return 245;
 			}
 			if((i%4) == 1){
-				return 320;
+				return 395;
 			}
 			if((i%4) == 2){
-				return 490;
+				return 545;
 			}
 			if((i%4) == 3){
-				return 660;
+				return 695;
 			}
 		})
-		.style("font-size", 28)
-		.style("font", 'MedievalSharp');
+		.style("font-size", 18)
+		.style("font-family", 'Game of Thrones');
 };
+
+function renderPopup(currentBattle){
+	// FIXME: Make this look better lol
+	console.log(currentBattle);
+	var name = currentBattle.name;
+	var attacker = currentBattle.attacker_1;
+	var defender = currentBattle.defender_1;
+	var attacker_commander = currentBattle.attacker_commander;
+	var defender_commander = currentBattle.defender_commander;
+	var region = currentBattle.region;
+	var attacker_size = currentBattle.attacker_size;
+	var defender_size = currentBattle.defender_size;
+	var attacker_outcome = currentBattle.attacker_outcome;
+	var winner = (attacker_outcome == "win") ? attacker : defender;
+	return "<strong>" + name + "</strong><br>Attacker: " + attacker + "<br>Attacking Commander: " + attacker_commander + "<br>Attacking Army Size: "+ attacker_size + "<br>Defender: " + defender + "<br>Defending Commander: " + defender_commander + "<br>Defending Army Size: " + attacker_size + "<br>Battle Winner: " + winner;
+}
