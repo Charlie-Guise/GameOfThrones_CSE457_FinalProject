@@ -9,22 +9,27 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
 	vis.houseBattles = houseBattles;
 	vis.currentHouse = currentHouse;
 	vis.houseMain = [
-		{"None": ["Davos Seaworth", "Samewell Tarly", "Bron"]},
-		{"Lannister": ["Joffrey Lannister", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
+		{"None": ["Davos Seaworth", "Samwell Tarly", "Bronn"]},
+		{"Lannister": ["Joffrey Baratheon", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
 		{"Targaryen": ["Daenerys Targaryen", "Jorah Mormont"]},
-		{"Greyjoy": ["Theon Greyjoy"]},
+		{"Greyjoy": ["Theon Greyjoy", "Yara Greyjoy", "Euron Greyjoy"]},
 		{"Baratheon": ["Robert Baratheon", "Stannis Baratheon", "Renly Baratheon"]},
 		{"Night's Watch": ["Jon Snow"]},
 		{"Arryn": []},
-		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Rob Stark", "Arya Stark"]},
+		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Robb Stark", "Arya Stark"]},
 		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]},
 		{"Martell": []},
-		{"Wildling": ["Mance Rayder"]},
+		{"Wildling": ["Mance Rayder", "Tormund Giantsbane"]},
 		{"Tully": []}
 
 	];
+	d3.json("data/game-of-thrones/character_paths.json", function(data) {
+		console.log(data);
+		vis.character_paths = data;
+	})
+
 	vis.map = map;
-	console.log(vis);
+	// console.log(vis);
 	vis.init();
 };
 
@@ -109,21 +114,32 @@ MenuPanel.prototype.update = function() {
 			d3.select("#menuPanelId").style("display", "none");
 			d3.select("#housePanelId").style("display", "inline");
 			//set the markers
-			var currentName = sigils[i];
+			var currentName = (sigils[i] == "NightsWatch") ? "Night's Watch" : sigils[i];
 			var currentBattles = vis.houseBattles[i][currentName];
 			var icon = L.icon({
 			    iconUrl: 'css/images/sword.png',
 			    iconSize: [15, 30], // size of the icon
 			});
-			vis.layerGroup = L.layerGroup().addTo(vis.map.map);
+			vis.battleLayerGroup = L.layerGroup().addTo(vis.map.map);
+			vis.characterPathLayerGroup = L.layerGroup().addTo(vis.map.map);
 
 			for(var i = 0; i < currentBattles.length; i++) {
 				var currentLat = parseFloat(currentBattles[i].lat);
 				var currentLong = parseFloat(currentBattles[i].long);
-				vis.marker = new L.marker([currentLat,currentLong], {icon: icon})
+				vis.battleMarker = new L.marker([currentLat,currentLong], {icon: icon})
 								.bindPopup(renderPopup(currentBattles[i]))
-								.addTo(vis.layerGroup);
+								.addTo(vis.battleLayerGroup);
 			}
+			// Also set all their family markers at their starting position
+			// for(c in vis.character_paths[currentName]) {
+			//     var c_path = (vis.character_paths[currentName][c]);
+			// 	var startingLat = c_path[0].lat;
+			// 	var startingLong = c_path[0].long;
+			//
+			// 	vis.characterMarker = new L.marker([startingLat, startingLong])
+			// 								.addTo(vis.characterPathLayerGroup);
+			// }
+
 			vis.housePanel = new HousePanel(d, currentName, vis);
 		});
 	// FIXME: Make this look prettier

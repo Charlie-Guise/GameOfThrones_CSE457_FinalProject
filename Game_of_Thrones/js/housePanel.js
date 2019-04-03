@@ -30,7 +30,7 @@ HousePanel.prototype.init = function(){
 				d3.select("#svg-menu-houses").remove();
 				d3.select("#housePanelId").style("display", "none");
 				d3.select("#menuPanelId").style("display", "inline");
-				vis.menuPanel.layerGroup.clearLayers();
+				vis.menuPanel.battleLayerGroup.clearLayers();
 			});
 	backButton.append("text").text("Back")
 			.attr("x", 65)
@@ -64,7 +64,92 @@ HousePanel.prototype.wrangleData = function(){
 }
 
 HousePanel.prototype.updateVis = function(){
+	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
+	var numPics = 0;
 	var vis = this;
+	var menuWidth = 823;
+	var familyImages = [];
+	var prevPath = "";
+	for(var i = 0; i < vis.menuPanel.houseMain.length; i++){
+		if(vis.menuPanel.houseMain[i][vis.houseName]){
+			familyImages = vis.menuPanel.houseMain[i];
+		}
+	}
+	console.log(vis.menuPanel.houseMain);
+	//Add the images of the different family members
+	vis.svg.selectAll('image').exit().remove().data(familyImages[vis.houseName]).enter()
+		.append('image')
+		.attr("xlink:href",function(d, index){
+			var image_str = d.replace(" ", "_");
+			return "./css/headshots/" + image_str + ".jpg";
+		})
+		.attr("x", function(d, i){
+			if(familyImages[vis.houseName].length <= 3){
+				return (i * (menuWidth/familyImages[vis.houseName].length)) + 40;
+			}
+			return (i * (menuWidth/familyImages[vis.houseName].length)) + 20;
+
+		})
+		.attr("y", 175)
+		.attr("width", function(d){
+			if(familyImages[vis.houseName].length <= 3){
+				return 200;
+			}
+			return 150;
+		})
+		.attr("height", function(d){
+			if(familyImages[vis.houseName].length <= 3){
+				return 200;
+			}
+			return 150;
+		})
+		.attr("fill", "white")
+		.on("click", function(name) {
+			vis.movingPath = {};
+			var path = [];
+			//start their marker movement
+			// Also set all their family markers at their starting position
+			var c_path = vis.menuPanel.character_paths[vis.houseName][name];
+			for(var i = 0; i < c_path.length; i++){
+				var latlong = [c_path[i].lat, c_path[i].long]
+				path.push(latlong);
+			}
+			if((prevPath != name) && (prevPath != '')){
+				//remove the old path
+				vis.menuPanel.map.map.removeLayer(vis.trail);
+				vis.menuPanel.map.map.removeLayer(vis.movingPath);
+			}
+			vis.movingPath = new L.Marker.movingMarker(path, 10000).addTo(vis.menuPanel.map.map);
+			vis.trail = L.polyline(path, {color: 'gray'}).addTo(vis.menuPanel.map.map);
+			vis.movingPath.once('click', function(){
+				vis.movingPath.start();
+				vis.movingPath.closePopup();
+				vis.movingPath.unbindPopup();
+				vis.movingPath.on('click', function(){
+					if(vis.movingPath.isRunning()){
+						vis.movingPath.pause()
+					}
+					else {
+						vis.movingPath.start();
+					}
+				});
+			});
+			vis.movingPath.bindPopup("Start or Pause");
+			vis.movingPath.openPopup();
+			prevPath = name;
+
+
+
+			// for(c in vis.menuPanel.character_paths[vis.houseName]) {
+			// 	var c_path = (vis.menuPanel.character_paths[vis.houseName][c]);
+			// 	for(var i = 0; i < vis.menuPanel.character_paths[vis.houseName][c].length; i++){
+			// 		var latlong = [c_path[i].lat, c_path[i].long];
+			// 		path.push(latlong);
+			// 	}
+			//
+
+			// }
+		});
 
 	var deathScale = d3.scaleLinear()
 						.domain([0, d3.max(vis.deathCount)])

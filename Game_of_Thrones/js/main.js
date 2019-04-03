@@ -1,13 +1,35 @@
-
 // Variable for the visualization instance
 var GameOfThronesMap;
 
+$(function() {
+	var overlay = $('<div id="overlay"></div>');
+	overlay.show();
+	overlay.appendTo(document.body);
+	document.getElementsByClassName('button-wrapper')[0].style.visibility = 'hidden';
+	$('.popup').show();
+	$('.exit').click(function() {
+		$('.popup').hide();
+		document.getElementsByClassName('button-wrapper')[0].style.visibility = 'visible';
+		loadData();
+		overlay.appendTo(document.body).remove();
+		return false;
+	});
+
+	$('.x').click(function() {
+		$('.popup').hide();
+		overlay.appendTo(document.body).remove();
+		return false;
+	});
+});
+
 // Start application by loading the data
-loadData();
+// loadData();
+
 var fullScreen = true;
 var menuPanel;
 var houses = [];
 var houseBattles = [];
+
 function loadData() {
 	// Load the 3 CSV files into the app
 	d3.queue()
@@ -19,12 +41,12 @@ function loadData() {
 
 
 function createVis(error, battles, deaths, predictions) {
-	if(error) {
+	if (error) {
 		console.log(error);
 	}
 	houses = createHouses(deaths, battles);
-  	// INSTANTIATE VISUALIZATION
-	var map = new GameOfThronesMap("map", battles, deaths, predictions, menuPanel);
+	// INSTANTIATE VISUALIZATION
+	var map = new GameOfThronesMap("map", battles, deaths, predictions, menuPanel, houses);
 	menuPanel = new MenuPanel("menuPanelId", houses, houseBattles, null, map);
 
 
@@ -33,19 +55,42 @@ function createVis(error, battles, deaths, predictions) {
 	});
 }
 
-function createHouses(deaths, battles){
-	var sigils = [{"None": []}, {"Lannister": []}, {"Targaryen": []}, {"Greyjoy": []}, {"Baratheon": []}, {"Night's Watch": []}, {"Arryn": []}, {"Stark": []}, {"Tyrell": []}, {"Martell": []}, {"Wildling": []}, {"Tully": []}];
+function createHouses(deaths, battles) {
+	var sigils = [{
+		"None": []
+	}, {
+		"Lannister": []
+	}, {
+		"Targaryen": []
+	}, {
+		"Greyjoy": []
+	}, {
+		"Baratheon": []
+	}, {
+		"Night's Watch": []
+	}, {
+		"Arryn": []
+	}, {
+		"Stark": []
+	}, {
+		"Tyrell": []
+	}, {
+		"Martell": []
+	}, {
+		"Wildling": []
+	}, {
+		"Tully": []
+	}];
 
-	for(var i = 0; i < deaths.length; i++){
-		if(deaths[i].Allegiances == "Night's Watch"){
+	for (var i = 0; i < deaths.length; i++) {
+		if (deaths[i].Allegiances == "Night's Watch") {
 			deaths[i].sigil = "css/houseSigils/NightsWatch.jpg";
-		}
-		else {
+		} else {
 			deaths[i].sigil = "css/houseSigils/" + deaths[i].Allegiances + ".jpg";
 		}
-		for(var j = 0; j < sigils.length; j++){
+		for (var j = 0; j < sigils.length; j++) {
 			var currentSigil = Object.keys(sigils[j]);
-			if(deaths[i].Allegiances == currentSigil){
+			if (deaths[i].Allegiances == currentSigil) {
 				var ind = deaths[i].Allegiances;
 				sigils[j][ind].push(deaths[i]);
 			}
@@ -53,54 +98,67 @@ function createHouses(deaths, battles){
 	}
 
 	var houses = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Mance", "Tully"];
-	houseBattles = [{"None": []}, {"Lannister": []}, {"Targaryen": []}, {"Greyjoy": []}, {"Baratheon": []}, {"Night's Watch": []}, {"Arryn": []}, {"Stark": []}, {"Tyrell": []}, {"Martell": []}, {"Wildling": []}, {"Tully": []}];
+	houseBattles = [{
+		"None": []
+	}, {
+		"Lannister": []
+	}, {
+		"Targaryen": []
+	}, {
+		"Greyjoy": []
+	}, {
+		"Baratheon": []
+	}, {
+		"Night's Watch": []
+	}, {
+		"Arryn": []
+	}, {
+		"Stark": []
+	}, {
+		"Tyrell": []
+	}, {
+		"Martell": []
+	}, {
+		"Wildling": []
+	}, {
+		"Tully": []
+	}];
 
-	for (var k = 0; k < houses.length; ++k){
+	for (var k = 0; k < houses.length; ++k) {
 		var house = houses[k];
-		for(var j = 0; j < battles.length; ++j){
+		for (var j = 0; j < battles.length; ++j) {
 			var include = 0;
-			if (battles[j].attacker_1.includes(house)){
+			if (battles[j].attacker_1.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].attacker_2.includes(house)){
+			} else if (battles[j].attacker_2.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].attacker_3.includes(house)){
+			} else if (battles[j].attacker_3.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].attacker_4.includes(house)){
+			} else if (battles[j].attacker_4.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].attacker_commander.includes(house)){
+			} else if (battles[j].attacker_commander.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].attacker_king.includes(house)){
+			} else if (battles[j].attacker_king.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_1.includes(house)){
+			} else if (battles[j].defender_1.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_2.includes(house)){
+			} else if (battles[j].defender_2.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_3.includes(house)){
+			} else if (battles[j].defender_3.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_4.includes(house)){
+			} else if (battles[j].defender_4.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_commander.includes(house)){
+			} else if (battles[j].defender_commander.includes(house)) {
 				include = 1;
-			}
-			else if (battles[j].defender_king.includes(house)){
+			} else if (battles[j].defender_king.includes(house)) {
 				include = 1;
 			}
 
-			if (battles[j].defender_king == "Mance Rayder" && house == "Mance"){
+			if (battles[j].defender_king == "Mance Rayder" && house == "Mance") {
 				house = "Wildling";
 			}
 
-			if (include == 1){
+			if (include == 1) {
 				houseBattles[k][house].push(battles[j]);
 			}
 
@@ -110,14 +168,13 @@ function createHouses(deaths, battles){
 }
 
 
-function toggleMenu(){
-	if(fullScreen){
+function toggleMenu() {
+	if (fullScreen) {
 		var panel = document.getElementById('panel').style.display = 'inline-block';
 		var map = document.getElementById('mapCol');
 		map.className = "col-md-6";
 		fullScreen = false;
-	}
-	else {
+	} else {
 		var panel = document.getElementById('panel').style.display = 'none';
 		var map = document.getElementById('mapCol');
 		map.className = "col-md-12";
@@ -125,14 +182,13 @@ function toggleMenu(){
 	}
 }
 
-function toggleMenuFromMap(kingdom){
-	if(fullScreen || (kingdom != "")){
+function toggleMenuFromMap(kingdom) {
+	if (fullScreen || (kingdom != "")) {
 		var panel = document.getElementById('panel').style.display = 'inline-block';
 		var map = document.getElementById('mapCol');
 		map.className = "col-md-6";
 		fullScreen = false;
-	}
-	else {
+	} else {
 		var panel = document.getElementById('panel').style.display = 'none';
 		var map = document.getElementById('mapCol');
 		map.className = "col-md-12";

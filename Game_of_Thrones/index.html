@@ -1,60 +1,79 @@
 <!doctype html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Game of Thrones</title>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Game of Thrones</title>
 
-  <!-- Load Google Font -->
-  <link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/leaflet.css">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/webfonts-master/game-of-thrones/GameofThrones_1.css">
+	<!-- Load Google Font -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/leaflet.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/webfonts-master/game-of-thrones/GameofThrones_1.css">
 </head>
+
 <body>
+	<div class='popup'>
+		<div class='intro-dialog'>
+			<h1>Welcome to the Land of Westeros</h1>
+			<p>
+				Game of Thrones is the fictional television show based on the George R. R. Martin fantasy series "A Song of Fire and Ice". Throughout it's tenure on the silver screen, we've followed characters through the fantasy land of Westeros as they've fought and battled for the Iron throne.
+				<br />
+				<br />
+				<br />
+				When all is said and done, <strong> Who will sit on the Iron Throne? </strong>
+				<br />
+				<br />
+				<br />
+				<a href='' class='exit'>Let the Battle Begin!</a>
+			</p>
+		</div>
+	</div>
+	<div class="container-fluid">
 
-  <div class="container-fluid">
-
-    <div class="row">
-      <div class="col-md-12" id="mapCol">
-        <!-- Visualization placeholders -->
-		<div id="GoT-map">
-        	<div id="map"></div>
-			<div class="button-wrapper">
-				<div class="leaflet-top leaflet-right" >
-					<input type="button" name="toggleScreen" value="Menu" id="toggleScreenButton" onclick="toggleMenu()">
+		<div class="row">
+			<div class="col-md-12" id="mapCol">
+				<!-- Visualization placeholders -->
+				<div id="GoT-map">
+					<div id="map"></div>
+					<div class="button-wrapper">
+						<div class="leaflet-top leaflet-right">
+							<input type="button" name="toggleScreen" value="Menu" id="toggleScreenButton" onclick="toggleMenu()">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" id="panel">
+				<div class="menuPanel" id="menuPanelId">
+				</div>
+				<div class="menuPanel" id="housePanelId">
 				</div>
 			</div>
 		</div>
-      </div>
-	  <div class="col-md-6" id="panel">
-	  	<div class="menuPanel" id="menuPanelId">
-	  	</div>
-		<div class="menuPanel" id="housePanelId">
-		</div>
-	  </div>
-    </div>
 
-  </div>
+	</div>
 
-  <!-- Load JS libraries -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/queue.js"></script>
-  <script src="leaflet/leaflet.js"></script>
-  <script src="js/d3.min.js"></script>
+	<!-- Load JS libraries -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/queue.js"></script>
+	<script src="leaflet/leaflet.js"></script>
+	<script src="js/Marker.Label.js"></script>
+	<script src="js/d3.min.js"></script>
 
-  <!-- Visualization objects -->
-  <script src="js/MovingMarker.js"></script>
-  <script src="js/thrones_map.js"></script>
-  <script src="js/housePanel.js"></script>
-  <script src="js/menuPanel.js"></script>
+	<!-- Visualization objects -->
+	<script src="js/MovingMarker.js"></script>
+	<script src="js/thrones_map.js"></script>
+	<script src="js/housePanel.js"></script>
+	<script src="js/menuPanel.js"></script>
 
-  </script>
+	</script>
 
-  <!-- Load data, create visualizations -->
-  <script src="js/main.js"></script>
+	<!-- Load data, create visualizations -->
+	<script src="js/main.js"></script>
 </body>
+
 </html>
