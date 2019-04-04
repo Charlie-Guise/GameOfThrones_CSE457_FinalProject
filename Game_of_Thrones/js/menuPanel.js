@@ -9,22 +9,21 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
 	vis.houseBattles = houseBattles;
 	vis.currentHouse = currentHouse;
 	vis.houseMain = [
-		{"None": ["Davos Seaworth", "Samwell Tarly", "Bronn"]},
+		{"None": ["Davos Seaworth", "Samwell Tarly"]},
 		{"Lannister": ["Joffrey Baratheon", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
-		{"Targaryen": ["Daenerys Targaryen", "Jorah Mormont"]},
+		{"Targaryen": ["Daenerys Targaryen"]},
 		{"Greyjoy": ["Theon Greyjoy", "Yara Greyjoy", "Euron Greyjoy"]},
 		{"Baratheon": ["Robert Baratheon", "Stannis Baratheon", "Renly Baratheon"]},
 		{"Night's Watch": ["Jon Snow"]},
 		{"Arryn": []},
 		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Robb Stark", "Arya Stark"]},
-		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]},
+		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]}, // Don't have location data on these people
 		{"Martell": []},
-		{"Wildling": ["Mance Rayder", "Tormund Giantsbane"]},
-		{"Tully": []}
+		{"Wildling": ["Mance Rayder", "Tormund Giantsbane"]},// Don't have location data on these people
+		{"Tully": ["Catelyn Stark"]}
 
 	];
 	d3.json("data/game-of-thrones/character_paths.json", function(data) {
-		console.log(data);
 		vis.character_paths = data;
 	})
 
@@ -57,10 +56,6 @@ MenuPanel.prototype.init = function() {
 
 MenuPanel.prototype.wrangleData = function() {
 	var vis = this;
-
-	// Currently no data wrangling/filtering needed
-	// vis.displayData = vis.data;
-
 	// Update the visualization
 	vis.update();
 
@@ -130,16 +125,6 @@ MenuPanel.prototype.update = function() {
 								.bindPopup(renderPopup(currentBattles[i]))
 								.addTo(vis.battleLayerGroup);
 			}
-			// Also set all their family markers at their starting position
-			// for(c in vis.character_paths[currentName]) {
-			//     var c_path = (vis.character_paths[currentName][c]);
-			// 	var startingLat = c_path[0].lat;
-			// 	var startingLong = c_path[0].long;
-			//
-			// 	vis.characterMarker = new L.marker([startingLat, startingLong])
-			// 								.addTo(vis.characterPathLayerGroup);
-			// }
-
 			vis.housePanel = new HousePanel(d, currentName, vis);
 		});
 	// FIXME: Make this look prettier

@@ -39,9 +39,12 @@ GameOfThronesMap.prototype.init = function() {
 		'https://cartocdn-gusc.global.ssl.fastly.net/ramirocartodb/api/v1/map/named/tpl_756aec63_3adb_48b6_9d14_331c6cbc47cf/all/{z}/{x}/{y}.png', {
 			crs: L.CRS.EPSG4326
 		}).addTo(vis.map);
-	vis.map.on('click', function(e) {
-	    console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
-	});
+	// var temp = []
+	// vis.map.on('click', function(e) {
+	// 	temp.push({"lat": e.latlng.lat, "long":e.latlng.lng})
+	//     console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+	// });
+	// console.log(temp);
 	// var testPath = [[15.105019491084093, 15.737881181582281],[12.026022106442833, 15.825810117505634],[8.476463154162138, 16.133561393237514], [5.156804702874525, 16.441312668969353], [1.4238883384953338, 16.74906394470119], [-2.3150809659051137, 17.100779688394727]];
 	//
 	// var marker2 = L.Marker.movingMarker(testPath,

@@ -31,6 +31,8 @@ HousePanel.prototype.init = function(){
 				d3.select("#housePanelId").style("display", "none");
 				d3.select("#menuPanelId").style("display", "inline");
 				vis.menuPanel.battleLayerGroup.clearLayers();
+				vis.menuPanel.map.map.removeLayer(vis.trail);
+				vis.menuPanel.map.map.removeLayer(vis.movingPath);
 			});
 	backButton.append("text").text("Back")
 			.attr("x", 65)
@@ -77,6 +79,7 @@ HousePanel.prototype.updateVis = function(){
 	}
 	console.log(vis.menuPanel.houseMain);
 	//Add the images of the different family members
+	vis.movingPath = {};
 	vis.svg.selectAll('image').exit().remove().data(familyImages[vis.houseName]).enter()
 		.append('image')
 		.attr("xlink:href",function(d, index){
@@ -105,7 +108,6 @@ HousePanel.prototype.updateVis = function(){
 		})
 		.attr("fill", "white")
 		.on("click", function(name) {
-			vis.movingPath = {};
 			var path = [];
 			//start their marker movement
 			// Also set all their family markers at their starting position
@@ -120,7 +122,7 @@ HousePanel.prototype.updateVis = function(){
 				vis.menuPanel.map.map.removeLayer(vis.movingPath);
 			}
 			vis.movingPath = new L.Marker.movingMarker(path, 10000).addTo(vis.menuPanel.map.map);
-			vis.trail = L.polyline(path, {color: 'gray'}).addTo(vis.menuPanel.map.map);
+			vis.trail = L.polyline(path, {color: 'red'}).addTo(vis.menuPanel.map.map);
 			vis.movingPath.once('click', function(){
 				vis.movingPath.start();
 				vis.movingPath.closePopup();
