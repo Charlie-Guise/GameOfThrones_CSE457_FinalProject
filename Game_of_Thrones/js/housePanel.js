@@ -7,6 +7,7 @@ function HousePanel(house, houseName, menuPanel){
 	vis.house = house;
 	vis.houseName = houseName;
 	vis.menuPanel = menuPanel;
+	console.log(vis);
 	vis.init();
 }
 
@@ -77,7 +78,30 @@ HousePanel.prototype.updateVis = function(){
 			familyImages = vis.menuPanel.houseMain[i];
 		}
 	}
-	console.log(vis.menuPanel.houseMain);
+
+	vis.svg.selectAll('.house-name').exit().remove()
+		.data([0])
+		.enter()
+		.append('text')
+			.text(vis.houseName)
+			.attr('x', 300)
+			.attr('y', 60)
+			.attr('class', 'house-name');
+
+
+	vis.svg.selectAll('character-name').exit().remove()
+		.data(familyImages[vis.houseName])
+		.enter()
+		.append('text')
+			.text(function(d){
+				console.log(d);
+				return d;
+			})
+			.attr('x', function(d, index){
+				return 45 + 155 * index;
+			})
+			.attr('y', 155)	
+			.attr('class', 'character-name');
 	//Add the images of the different family members
 	vis.movingPath = {};
 	vis.svg.selectAll('image').exit().remove().data(familyImages[vis.houseName]).enter()
@@ -165,11 +189,9 @@ HousePanel.prototype.updateVis = function(){
 	var yAxis = d3.axisLeft().scale(deathScale);
 
 	//Create the visualizations (Bar Chart of Deaths)
-	console.log(vis.deathCount);
 	vis.svg.selectAll("rect").data(vis.deathCount).enter()
 		.append("rect")
 		.attr("x", function(d, i){
-			console.log(i);
 			return -50 + xScale(i + 297);
 		})
 		.attr("y", function(d, i){
