@@ -31,8 +31,6 @@ HousePanel.prototype.init = function(){
 				d3.select("#housePanelId").style("display", "none");
 				d3.select("#menuPanelId").style("display", "inline");
 				vis.menuPanel.battleLayerGroup.clearLayers();
-				vis.menuPanel.map.map.removeLayer(vis.trail);
-				vis.menuPanel.map.map.removeLayer(vis.movingPath);
 			});
 	backButton.append("text").text("Back")
 			.attr("x", 65)
@@ -108,49 +106,19 @@ HousePanel.prototype.updateVis = function(){
 		})
 		.attr("fill", "white")
 		.on("click", function(name) {
-			var path = [];
-			//start their marker movement
-			// Also set all their family markers at their starting position
-			var c_path = vis.menuPanel.character_paths[vis.houseName][name];
-			for(var i = 0; i < c_path.length; i++){
-				var latlong = [c_path[i].lat, c_path[i].long]
-				path.push(latlong);
+			console.log(vis);
+			var prediction = {};
+			// Grab the Character's predictions
+			for(var i = 0; i < vis.menuPanel.map.predictions.length; i++) {
+				if(vis.menuPanel.map.predictions[i].name == name) {
+					prediction = vis.menuPanel.map.predictions[i];
+					break;
+			    }
 			}
-			if((prevPath != name) && (prevPath != '')){
-				//remove the old path
-				vis.menuPanel.map.map.removeLayer(vis.trail);
-				vis.menuPanel.map.map.removeLayer(vis.movingPath);
-			}
-			vis.movingPath = new L.Marker.movingMarker(path, 10000).addTo(vis.menuPanel.map.map);
-			vis.trail = L.polyline(path, {color: 'red'}).addTo(vis.menuPanel.map.map);
-			vis.movingPath.once('click', function(){
-				vis.movingPath.start();
-				vis.movingPath.closePopup();
-				vis.movingPath.unbindPopup();
-				vis.movingPath.on('click', function(){
-					if(vis.movingPath.isRunning()){
-						vis.movingPath.pause()
-					}
-					else {
-						vis.movingPath.start();
-					}
-				});
-			});
-			vis.movingPath.bindPopup("Start or Pause");
-			vis.movingPath.openPopup();
-			prevPath = name;
+			var character = new Character(name, vis.houseName, prediction, vis.menuPanel);
 
-
-
-			// for(c in vis.menuPanel.character_paths[vis.houseName]) {
-			// 	var c_path = (vis.menuPanel.character_paths[vis.houseName][c]);
-			// 	for(var i = 0; i < vis.menuPanel.character_paths[vis.houseName][c].length; i++){
-			// 		var latlong = [c_path[i].lat, c_path[i].long];
-			// 		path.push(latlong);
-			// 	}
-			//
-
-			// }
+			d3.select("#housePanelId").style("display", "none");
+			d3.select("#characterPanelId").style("display", "inline");
 		});
 
 	var deathScale = d3.scaleLinear()
