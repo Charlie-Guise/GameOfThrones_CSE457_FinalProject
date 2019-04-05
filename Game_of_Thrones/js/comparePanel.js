@@ -2,7 +2,7 @@
  *  This file will create all the visualizations related to a single
  *	house. It will overlay the menuPanel
  */
-function HousePanel(house, houseName, menuPanel){
+function ComparePanel(house, houseName, menuPanel){
 	var vis = this;
 	vis.house = house;
 	vis.houseName = houseName;
@@ -11,7 +11,7 @@ function HousePanel(house, houseName, menuPanel){
 }
 
 
-HousePanel.prototype.init = function(){
+ComparePanel.prototype.init = function(){
 	var vis = this;
 	vis.svgHeight = 850;
 	vis.svg = d3.select("#comparePanelId").append("svg")
@@ -28,7 +28,7 @@ HousePanel.prototype.init = function(){
 			.attr("fill","#0f1113")
 			.on("click", function(){
 				d3.select("#svg-menu-houses").remove();
-				d3.select("#housePanelId").style("display", "none");
+				d3.select("#ComparePanelId").style("display", "none");
 				d3.select("#menuPanelId").style("display", "inline");
 				vis.menuPanel.battleLayerGroup.clearLayers();
 				vis.menuPanel.map.map.removeLayer(vis.trail);
@@ -42,9 +42,9 @@ HousePanel.prototype.init = function(){
 	vis.wrangleData();
 }
 
-HousePanel.prototype.wrangleData = function(){
+ComparePanel.prototype.wrangleData = function(){
 	var vis = this;
-	
+
 	vis.updateVis();
 }
 
