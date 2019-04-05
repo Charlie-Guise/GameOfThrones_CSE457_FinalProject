@@ -130,3 +130,21 @@ body {
 .intro-dialog .x:hover {
 	cursor: pointer;
 }
+
+.house-name {
+	font-family: "Game of Thrones";
+	font-size: 30px;
+	text-align: center;
+}
+
+.character-name {
+	font-family: "Game of Thrones";
+	font-size: 15px;
+	text-align: center;
+}
+
+.compare-text {
+	font-family: "Game of Thrones";
+	font-size: 15px;
+	text-align: center;
+}

@@ -28,7 +28,6 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
 	})
 
 	vis.map = map;
-	// console.log(vis);
 	vis.init();
 };
 
@@ -61,7 +60,6 @@ MenuPanel.prototype.wrangleData = function() {
 
 };
 
-
 /*
  *  The drawing function
  */
@@ -71,64 +69,105 @@ MenuPanel.prototype.update = function() {
 	vis.svg.append("text").text("Houses of Westeros").attr("x", 100).attr("y", 75).style("font-size", 48).style("font-family", "Game of Thrones");
 	var sigilGroup = vis.svg.append("g").attr("class", "sigils");
 	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
-	sigilGroup.selectAll('image').remove().exit().data(vis.houses).enter()
-		.append('image')
-		.attr("xlink:href",function(d, index){
-			return "./css/houseSigils/" + sigils[index] + ".jpg";
-		})
-		.attr("width", 200)
-		.attr("height", 150)
-		.attr("x", function(d, i){
-			if((i%3) == 0){
-				return 70;
-			}
-			if((i%3) == 1){
-				return 320;
-			}
-			if((i%3) == 2){
-				return 570;
-			}
-		})
-		.attr("y", function(d, i){
-			if((i%4) == 0){
-				return 250;
-			}
-			if((i%4) == 1){
-				return 400;
-			}
-			if((i%4) == 2){
-				return 550;
-			}
-			if((i%4) == 3){
-				return 700;
-			}
-		})
-		.attr("width", 150)
-		.attr("height", 115)
-		.on('click', function(d, i){
-			d3.select("#menuPanelId").style("display", "none");
-			d3.select("#housePanelId").style("display", "inline");
-			//set the markers
-			var currentName = (sigils[i] == "NightsWatch") ? "Night's Watch" : sigils[i];
-			var currentBattles = vis.houseBattles[i][currentName];
-			var icon = L.icon({
-			    iconUrl: 'css/images/sword.png',
-			    iconSize: [15, 30], // size of the icon
-			});
-			vis.battleLayerGroup = L.layerGroup().addTo(vis.map.map);
-			vis.characterPathLayerGroup = L.layerGroup().addTo(vis.map.map);
 
-			for(var i = 0; i < currentBattles.length; i++) {
-				var currentLat = parseFloat(currentBattles[i].lat);
-				var currentLong = parseFloat(currentBattles[i].long);
-				vis.battleMarker = new L.marker([currentLat,currentLong], {icon: icon})
-								.bindPopup(renderPopup(currentBattles[i]))
-								.addTo(vis.battleLayerGroup);
-			}
-			vis.housePanel = new HousePanel(d, currentName, vis);
-		});
-	// FIXME: Make this look prettier
-	sigilGroup.selectAll("text").remove().exit().data(vis.houses).enter()
+	vis.svg.selectAll('.compare-sigil')
+		.remove().exit()
+		.data(['Compare']).enter()
+		.append('image')
+			.attr("xlink:href", function(d){
+				return "./css/houseSigils/" + d + ".jpg";
+			})
+			.attr("width", 150)
+			.attr("height", 115)
+			.attr("x", 320)
+			.attr("y", 100)
+			.attr("class", "compare-sigil")
+			.on("click", function(d, i){
+				d3.select("#menuPanelId").style("display", "none");
+				d3.select("#comparePanelId").style("display", "inline");
+
+				console.log(vis);
+
+				vis.comparePanel = new ComparePanel();
+			});
+	vis.svg.selectAll('.compare-text')
+		.remove().exit()
+		.data(["Who is", "the best?"]).enter()
+		.append('text')
+			.text(function(d){
+				return d;
+			})
+			.attr('class', 'compare-text')
+			.attr('x', function(d, index){
+				if (index == 0){
+					return 250;
+				}
+				else {
+					return 470;
+				}
+			})
+			.attr('y', 150)
+
+	sigilGroup.selectAll('image')
+		.remove().exit()
+		.data(vis.houses).enter()
+		.append('image')
+			.attr("xlink:href",function(d, index){
+				return "./css/houseSigils/" + sigils[index] + ".jpg";
+			})
+			.attr("width", 200)
+			.attr("height", 150)
+			.attr("x", function(d, i){
+				if((i%3) == 0){
+					return 70;
+				}
+				if((i%3) == 1){
+					return 320;
+				}
+				if((i%3) == 2){
+					return 570;
+				}
+			})
+			.attr("y", function(d, i){
+				if((i%4) == 0){
+					return 250;
+				}
+				if((i%4) == 1){
+					return 400;
+				}
+				if((i%4) == 2){
+					return 550;
+				}
+				if((i%4) == 3){
+					return 700;
+				}
+			})
+			.attr("width", 150)
+			.attr("height", 115)
+			.on('click', function(d, i){
+				d3.select("#menuPanelId").style("display", "none");
+				d3.select("#housePanelId").style("display", "inline");
+				//set the markers
+				var currentName = (sigils[i] == "NightsWatch") ? "Night's Watch" : sigils[i];
+				var currentBattles = vis.houseBattles[i][currentName];
+				var icon = L.icon({
+					iconUrl: 'css/images/sword.png',
+					iconSize: [15, 30], // size of the icon
+				});
+				vis.battleLayerGroup = L.layerGroup().addTo(vis.map.map);
+				vis.characterPathLayerGroup = L.layerGroup().addTo(vis.map.map);
+
+				for(var i = 0; i < currentBattles.length; i++) {
+					var currentLat = parseFloat(currentBattles[i].lat);
+					var currentLong = parseFloat(currentBattles[i].long);
+					vis.battleMarker = new L.marker([currentLat,currentLong], {icon: icon})
+									.bindPopup(renderPopup(currentBattles[i]))
+									.addTo(vis.battleLayerGroup);
+				}
+				vis.housePanel = new HousePanel(d, currentName, vis);
+			});
+
+		sigilGroup.selectAll("text").remove().exit().data(vis.houses).enter()
 		.append("text")
 		.text(function(d, i){
 			if((sigils[i] != "Wildling") && (sigils[i] != "NightsWatch") && (sigils[i] != "None")){
