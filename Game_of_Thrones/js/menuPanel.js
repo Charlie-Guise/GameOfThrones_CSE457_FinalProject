@@ -2,12 +2,13 @@
  * Constructor for the Game of Thrones Map
 
  */
-function MenuPanel(parentElement, houses, houseBattles, currentHouse, map){
+function MenuPanel(parentElement, houses, houseBattles, currentHouse, map, battles){
 	var vis = this;
 	vis.parentElement = parentElement;
 	vis.houses = houses;
 	vis.houseBattles = houseBattles;
 	vis.currentHouse = currentHouse;
+	vis.battlesRawData = battles;
 	vis.houseMain = [
 		{"None": ["Davos Seaworth", "Samwell Tarly"]},
 		{"Lannister": ["Joffrey Baratheon", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
@@ -86,9 +87,7 @@ MenuPanel.prototype.update = function() {
 				d3.select("#menuPanelId").style("display", "none");
 				d3.select("#comparePanelId").style("display", "inline");
 
-				console.log(vis);
-
-				vis.comparePanel = new ComparePanel();
+				vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData);
 			});
 	vis.svg.selectAll('.compare-text')
 		.remove().exit()

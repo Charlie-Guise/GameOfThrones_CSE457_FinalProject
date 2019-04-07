@@ -47,7 +47,7 @@ function createVis(error, battles, deaths, predictions) {
 	houses = createHouses(deaths, battles);
 	// INSTANTIATE VISUALIZATION
 	var map = new GameOfThronesMap("map", battles, deaths, predictions, menuPanel, houses);
-	menuPanel = new MenuPanel("menuPanelId", houses, houseBattles, null, map);
+	menuPanel = new MenuPanel("menuPanelId", houses, houseBattles, null, map, battles);
 
 
 	d3.json("kingdomBorders.json", function(error, data) {
