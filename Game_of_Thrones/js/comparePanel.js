@@ -102,7 +102,7 @@ ComparePanel.prototype.wrangleData = function(){
 	}, {
 		"Rayder": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
 	}, {
-		"Tully": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rader": 0}, {"Tully": 0}]
+		"Tully": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
 	}];
 
 	for (var i = 0; i < vis.battlesRawData.length; ++i){
@@ -187,25 +187,77 @@ ComparePanel.prototype.updateVis = function(){
 
 	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(50,450)").call(yAxisDeath);
 
-	var foeScale = d3.scaleLinear()
-		.domain([0, 20])
-		.range([0, 10]);
+	var circleScale = d3.scaleLinear()
+		.domain([0, 19])
+		.range([5, 10]);
 
 	for (var i = 0; i < vis.foes.length; ++i){
-		vis.svg.selectAll('.foe-circle')
-		.remove().exit()
-		.data(vis.foes[i][vis.houseBattleNames[i]]).enter()
-		.append('circle')
-			.attr('class', 'foe-circle')
-			.attr('x', function(d, index){
-				return 0;
-			})
-			.attr('y', function(d, index){
-				return 0;
-			})
-			.attr('r', function(d, index){
-				console.log(d[vis.houseBattleNames[index]]);
-				return foeScale(d[vis.houseBattleNames[index]]);
-			})
+		var tempFoe = '.foe-circle-' + i;
+		vis.svg.selectAll(tempFoe)
+			.remove().exit()
+			.data(vis.foes[i][vis.houseBattleNames[i]]).enter()
+			.append('circle')
+				.attr('class', function(){
+					return 'foe-circle-'  + i;
+				})
+				.attr('cx', function(d, index){
+					return 50 + index * 20;
+				})
+				.attr('cy', function(){
+					return 150 + i * 20;
+				})
+				.attr('r', function(d, index){
+					var val = d[vis.houseBattleNames[index]];
+					if (val != 0){
+						return circleScale(val);
+					}
+					else {
+						return 3;
+					}
+				})
+				.attr('fill', function(d, index){
+					var val = d[vis.houseBattleNames[index]];
+					if (val == 0){
+						return 'black';
+					}
+					else {
+						return 'red';
+					}
+				});
+
+		var tempFriend = '.friend-circle-' + i;
+		vis.svg.selectAll(tempFriend)
+			.remove().exit()
+			.data(vis.friends[i][vis.houseBattleNames[i]]).enter()
+			.append('circle')
+				.attr('class', function(){
+					return 'friend-circle-'  + i;
+				})
+				.attr('cx', function(d, index){
+					return 400 + index * 20;
+				})
+				.attr('cy', function(){
+					return 150 + i * 20;
+				})
+				.attr('r', function(d, index){
+					var val = d[vis.houseBattleNames[index]];
+					console.log(vis.houseBattleNames[index]);
+					console.log(d);
+					if (val != 0){
+						return circleScale(val);
+					}
+					else {
+						return 3;
+					}
+				})
+				.attr('fill', function(d, index){
+					var val = d[vis.houseBattleNames[index]];
+					if (val == 0){
+						return 'white';
+					}
+					else {
+						return 'blue';
+					}
+				});
 	}	
 }
