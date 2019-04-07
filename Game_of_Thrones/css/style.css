@@ -154,3 +154,29 @@ body {
 	font-size: 30px;
 	text-align: center;
 }
+
+.foe-y-label {
+	font-family: 'Game of Thrones';
+	font-size: 10px;
+	text-anchor: end;
+}
+
+.foe-x-label {
+	font-family: 'Game of Thrones';
+	font-size: 10px;
+	text-orientation: upright;
+	writing-mode: vertical-rl;
+}
+
+.friend-y-label {
+	font-family: 'Game of Thrones';
+	font-size: 10px;
+	text-anchor: end;
+}
+
+.friend-x-label {
+	font-family: 'Game of Thrones';
+	font-size: 10px;
+	text-orientation: upright;
+	writing-mode: vertical-rl;
+}

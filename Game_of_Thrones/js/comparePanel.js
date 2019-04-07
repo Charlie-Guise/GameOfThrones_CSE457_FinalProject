@@ -201,10 +201,10 @@ ComparePanel.prototype.updateVis = function(){
 					return 'foe-circle-'  + i;
 				})
 				.attr('cx', function(d, index){
-					return 50 + index * 20;
+					return 120 + index * 20;
 				})
 				.attr('cy', function(){
-					return 150 + i * 20;
+					return 100 + i * 20;
 				})
 				.attr('r', function(d, index){
 					var val = d[vis.houseBattleNames[index]];
@@ -234,15 +234,13 @@ ComparePanel.prototype.updateVis = function(){
 					return 'friend-circle-'  + i;
 				})
 				.attr('cx', function(d, index){
-					return 400 + index * 20;
+					return 480 + index * 20;
 				})
 				.attr('cy', function(){
-					return 150 + i * 20;
+					return 100 + i * 20;
 				})
 				.attr('r', function(d, index){
 					var val = d[vis.houseBattleNames[index]];
-					console.log(vis.houseBattleNames[index]);
-					console.log(d);
 					if (val != 0){
 						return circleScale(val);
 					}
@@ -260,4 +258,52 @@ ComparePanel.prototype.updateVis = function(){
 					}
 				});
 	}	
+	vis.svg.selectAll('.foe-y-label')
+		.remove().exit()
+		.data(vis.houseNames).enter()
+		.append('text')
+			.attr('class', 'foe-y-label')
+			.text(function(d){
+				return d;
+			})
+			.attr('x', 110)
+			.attr('y', function(d, index){
+				return 100 + index * 20;
+			});
+	vis.svg.selectAll('.friend-y-label')
+		.remove().exit()
+		.data(vis.houseNames).enter()
+		.append('text')
+			.attr('class', 'friend-y-label')
+			.text(function(d){
+				return d;
+			})
+			.attr('x', 470)
+			.attr('y', function(d, index){
+				return 100 + index * 20;
+			});
+	vis.svg.selectAll('.foe-x-label')
+		.remove().exit()
+		.data(vis.houseNames).enter()
+		.append('text')
+			.attr('class', 'foe-x-label')
+			.text(function(d){
+				return d;
+			})
+			.attr('y', 330)
+			.attr('x', function(d, index){
+				return 120 + index * 20;
+			});
+	vis.svg.selectAll('.friend-x-label')
+		.remove().exit()
+		.data(vis.houseNames).enter()
+		.append('text')
+			.attr('class', 'friend-x-label')
+			.text(function(d){
+				return d;
+			})
+			.attr('y', 330)
+			.attr('x', function(d, index){
+				return 480 + index * 20;
+			});
 }
