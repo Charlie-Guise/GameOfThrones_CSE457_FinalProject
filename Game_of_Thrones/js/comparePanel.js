@@ -38,7 +38,7 @@ ComparePanel.prototype.init = function(){
 			.attr("x", 65)
 			.attr("y", 50)
 			.attr("fill", "white");
-	
+
 	vis.svg.selectAll('.compare-title')
 		.remove().exit()
 		.data(['Is your house winning?']).enter()
@@ -160,40 +160,203 @@ function fought(name, battle){
 
 ComparePanel.prototype.updateVis = function(){
 	var vis = this;
-
 	var deathScale = d3.scaleLinear()
 		.domain([0, 253])
-		.range([299, 0]);
-
+		.range([549, 0]);
 	var yAxisDeath = d3.axisLeft().scale(deathScale);
 
-	vis.svg.selectAll('.death-rect')
+	var deathChartVisible = true;
+	var foeMatrixVisible = false;
+	var friendMatrixVisible = false;
+
+	//toggle buttons
+	vis.svg.append("rect").attr("id", "toggleLeft")
+		.attr("x", 275)
+		.attr("y", 100)
+		.attr("width", 75)
+		.attr("height",30)
+		.attr("fill", "black")
+		.on("click", function(){
+			console.log("Toggle Left");
+			// Can't more left anymore
+			if(deathChartVisible){
+				return;
+			}
+			else {
+				// shift the visual that's showing
+				if(!deathChartVisible && foeMatrixVisible) {
+					// move the chart out
+					foeMatrixVisible = false;
+					deathChartVisible = true;
+					console.log("death chart vis: " + deathChartVisible);
+					console.log("foe chart vis: " + foeMatrixVisible);
+					console.log("friend chart vis: " + friendMatrixVisible);
+					vis.svg.select("#foe-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(850, 0)")
+						.style("fill-opacity", 1e-6)
+						.on("end", function(){
+							d3.select("#foe-matrix").style("display", "none");
+						});
+
+					// FIXME: slowly move in the new chart
+					vis.svg.select("#deathBarChart")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(-800, 0)")
+						.style("fill-opacity", 1)
+						.on("end", function() {
+							d3.select("#deathBarChart").style("display", "contents");
+						});
+				}
+				else if(!foeMatrixVisible && friendMatrixVisible) {
+					// move the chart out
+					friendMatrixVisible = false;
+					foeMatrixVisible = true;
+					console.log("death chart vis: " + deathChartVisible);
+					console.log("foe chart vis: " + foeMatrixVisible);
+					console.log("friend chart vis: " + friendMatrixVisible);
+					vis.svg.select("#friend-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(850, 0)")
+						.style("fill-opacity", 1e-6)
+						.on("end", function(){
+							d3.select("#friend-matrix").style("display", "none");
+						});
+
+					// FIXME: slowly move in the new chart
+					vis.svg.select("#foe-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(20, 0)")
+						.style("fill-opacity", 1)
+						.on("end", function() {
+							d3.select("#foe-matrix").style("display", "contents");
+						});
+				}
+			}
+
+		});
+	vis.svg.append("text").text("prev")
+		.attr("x", 290)
+		.attr("y", 123)
+		.attr("width", 75)
+		.attr("height",30)
+		.attr("fill", "white")
+		.style("font-size", 15)
+		.style("font-family", "Game of Thrones");
+
+	vis.svg.append("rect").attr("id", "toggleRight")
+		.attr("x", 500)
+		.attr("y", 100)
+		.attr("width", 75)
+		.attr("height", 30)
+		.attr("fill", "black")
+		.on("click", function(){
+			console.log("Toggle Right");
+			// Can't move right anymore
+			if(friendMatrixVisible){
+				d3.select(this).on("click", null);
+			}
+			else {
+				if(!foeMatrixVisible) {
+					// move the chart out
+					foeMatrixVisible = true;
+					deathChartVisible = false;
+					console.log("death chart vis: " + deathChartVisible);
+					console.log("foe chart vis: " + foeMatrixVisible);
+					console.log("friend chart vis: " + friendMatrixVisible);
+					vis.svg.select("#deathBarChart")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(-800, 0)")
+						.style("fill-opacity", 1e-6)
+						.on("end", function(){
+							d3.select("#deathBarChart").style("display", "none");
+						});
+					// FIXME: slowly move in the new chart
+					vis.svg.select("#foe-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(20, 0)")
+						.style("fill-opacity", 1)
+						.on("end", function() {
+							d3.select("#foe-matrix").style("display", "inline");
+						});
+				}
+				else if(!friendMatrixVisible) {
+					// move the chart out
+					friendMatrixVisible = true;
+					foeMatrixVisible = false;
+					console.log("death chart vis: " + deathChartVisible);
+					console.log("foe chart vis: " + foeMatrixVisible);
+					console.log("friend chart vis: " + friendMatrixVisible);
+					vis.svg.select("#foe-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(-800, 0)")
+						.style("fill-opacity", 1e-6)
+						.on("end", function(){
+							d3.select("#foe-matrix").style("display", "none");
+						});
+
+					// FIXME: slowly move in the new chart
+					vis.svg.select("#friend-matrix")
+						.transition()
+						.duration(1000)
+						.attr("transform", "translate(20, 0)")
+						.style("fill-opacity", 1)
+						.on("end", function() {
+							d3.select("#friend-matrix").style("display", "inline");
+						});
+
+				}
+			}
+
+		});
+	vis.svg.append("text").text("next")
+		.attr("x", 513)
+		.attr("y", 123)
+		.attr("width", 75)
+		.attr("height",30)
+		.attr("fill", "white")
+		.style("font-size", 15)
+		.style("font-family", "Game of Thrones");
+
+	// The Bar Chart
+	var barchart = vis.svg.append("g").attr("id", "deathBarChart");
+	barchart.selectAll('.death-rect')
 		.remove().exit()
 		.data(vis.houses).enter()
 		.append('rect')
 			.attr('class', 'death-rect')
 			.attr('x', function(d, index){
-				return 50 + 30 * index;
+				return 50 + 60 * index;
 			})
 			.attr('y', function(d, index){
 				var tempHeight = d[vis.houseNames[index]].length;
-				return 750 - (300 - deathScale(tempHeight));
+				return 500 - (300 - deathScale(tempHeight));
 			})
 			.attr('height', function(d, index){
-				return 300 - deathScale(d[vis.houseNames[index]].length);
+				return 550 - deathScale(d[vis.houseNames[index]].length);
 			})
-			.attr('width', 20)
+			.attr('width', 50)
 			.attr('fill', 'lightcoral');
 
-	vis.svg.append("g").attr("class", "axis").attr("transform", "translate(50,450)").call(yAxisDeath);
+	barchart.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(yAxisDeath);
 
+	// The friend/foe matrix
+	var foeMatrix = vis.svg.append("g").attr("id", "foe-matrix");
+	var friendMatrix = vis.svg.append("g").attr("id", "friend-matrix");
 	var circleScale = d3.scaleLinear()
 		.domain([0, 19])
-		.range([5, 10]);
+		.range([12, 17]);
 
 	for (var i = 0; i < vis.foes.length; ++i){
 		var tempFoe = '.foe-circle-' + i;
-		vis.svg.selectAll(tempFoe)
+		foeMatrix.selectAll(tempFoe)
 			.remove().exit()
 			.data(vis.foes[i][vis.houseBattleNames[i]]).enter()
 			.append('circle')
@@ -201,10 +364,10 @@ ComparePanel.prototype.updateVis = function(){
 					return 'foe-circle-'  + i;
 				})
 				.attr('cx', function(d, index){
-					return 120 + index * 20;
+					return 150 + index * 50;
 				})
 				.attr('cy', function(){
-					return 100 + i * 20;
+					return 180 + i * 40;
 				})
 				.attr('r', function(d, index){
 					var val = d[vis.houseBattleNames[index]];
@@ -212,7 +375,7 @@ ComparePanel.prototype.updateVis = function(){
 						return circleScale(val);
 					}
 					else {
-						return 3;
+						return 7;
 					}
 				})
 				.attr('fill', function(d, index){
@@ -224,9 +387,8 @@ ComparePanel.prototype.updateVis = function(){
 						return 'red';
 					}
 				});
-
 		var tempFriend = '.friend-circle-' + i;
-		vis.svg.selectAll(tempFriend)
+		friendMatrix.selectAll(tempFriend)
 			.remove().exit()
 			.data(vis.friends[i][vis.houseBattleNames[i]]).enter()
 			.append('circle')
@@ -234,10 +396,10 @@ ComparePanel.prototype.updateVis = function(){
 					return 'friend-circle-'  + i;
 				})
 				.attr('cx', function(d, index){
-					return 480 + index * 20;
+					return 150 + index * 50;
 				})
 				.attr('cy', function(){
-					return 100 + i * 20;
+					return 180 + i * 40;
 				})
 				.attr('r', function(d, index){
 					var val = d[vis.houseBattleNames[index]];
@@ -245,7 +407,7 @@ ComparePanel.prototype.updateVis = function(){
 						return circleScale(val);
 					}
 					else {
-						return 3;
+						return 7;
 					}
 				})
 				.attr('fill', function(d, index){
@@ -257,8 +419,8 @@ ComparePanel.prototype.updateVis = function(){
 						return 'blue';
 					}
 				});
-	}	
-	vis.svg.selectAll('.foe-y-label')
+	}
+	foeMatrix.selectAll('.foe-y-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
 		.append('text')
@@ -268,9 +430,9 @@ ComparePanel.prototype.updateVis = function(){
 			})
 			.attr('x', 110)
 			.attr('y', function(d, index){
-				return 100 + index * 20;
+				return 180 + index * 40;
 			});
-	vis.svg.selectAll('.friend-y-label')
+	friendMatrix.selectAll('.friend-y-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
 		.append('text')
@@ -278,11 +440,11 @@ ComparePanel.prototype.updateVis = function(){
 			.text(function(d){
 				return d;
 			})
-			.attr('x', 470)
+			.attr('x', 110)
 			.attr('y', function(d, index){
-				return 100 + index * 20;
+				return 180 + index * 40;
 			});
-	vis.svg.selectAll('.foe-x-label')
+	foeMatrix.selectAll('.foe-x-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
 		.append('text')
@@ -290,11 +452,11 @@ ComparePanel.prototype.updateVis = function(){
 			.text(function(d){
 				return d;
 			})
-			.attr('y', 330)
+			.attr('y', 650)
 			.attr('x', function(d, index){
-				return 120 + index * 20;
+				return 150 + index * 50;
 			});
-	vis.svg.selectAll('.friend-x-label')
+	friendMatrix.selectAll('.friend-x-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
 		.append('text')
@@ -302,8 +464,11 @@ ComparePanel.prototype.updateVis = function(){
 			.text(function(d){
 				return d;
 			})
-			.attr('y', 330)
+			.attr('y', 650)
 			.attr('x', function(d, index){
-				return 480 + index * 20;
+				return 150 + index * 50;
 			});
+	d3.select("#foe-matrix").style("display", "none");
+	d3.select("#friend-matrix").style("display", "none");
+
 }
