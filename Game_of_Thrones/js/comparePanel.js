@@ -55,6 +55,22 @@ ComparePanel.prototype.init = function(){
 
 ComparePanel.prototype.wrangleData = function(){
 	var vis = this;
+
+	vis.colorScheme = {
+		"None": "#c15c1e",
+		"Lannister": "#87090a",
+		"Targaryen": "#a9171f",
+		"Greyjoy": "#372e11",
+		"Baratheon": "#fecf03",
+		"Night's Watch": "#383838",
+		"Arryn":"#111a29",
+		"Stark": "#747474",
+		"Tyrell": "#8da17e",
+		"Martell": "#f08639",
+		"Wildling": "#baedf8",
+		"Tully": "#21224e"
+	};
+
 	vis.friendBattles = [{
 		"None": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
@@ -350,7 +366,18 @@ ComparePanel.prototype.updateVis = function(){
 				return 550 - deathScale(d[vis.houseNames[index]].length);
 			})
 			.attr('width', 50)
-			.attr('fill', 'lightcoral');
+			.attr('fill', function(d, i){
+				var color = vis.colorScheme[vis.houseNames[i]];
+				return color;
+			})
+			.style("opacity", 0.75)
+			.on("mouseover", function(){
+				d3.select(this).style("opacity", 1);
+				//Add a tooltip with all the information about a family
+			})
+			.on("mouseout", function(){
+				d3.select(this).style("opacity", 0.75);
+			});
 
 	barchart.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(yAxisDeath);
 
@@ -388,10 +415,10 @@ ComparePanel.prototype.updateVis = function(){
 				.attr('fill', function(d, index){
 					var curHouse = d[vis.houseBattleNames[index]];
 					if (curHouse.count == 0){
-						return 'black';
+						return '#edd49d';
 					}
 					else {
-						return 'red';
+						return '#974449';
 					}
 				})
 				.style("cursor", "pointer")
@@ -463,10 +490,10 @@ ComparePanel.prototype.updateVis = function(){
 				.attr('fill', function(d, index){
 					var curHouse = d[vis.houseBattleNames[index]];
 					if (curHouse.count == 0){
-						return 'white';
+						return '#edd49d';
 					}
 					else {
-						return 'blue';
+						return '#0f5778';
 					}
 				})
 				.style("cursor", "pointer")
