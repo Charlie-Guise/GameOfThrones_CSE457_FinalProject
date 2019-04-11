@@ -104,6 +104,9 @@ Character.prototype.createVis = function() {
 		.style("font-family", "Game of Thrones")
 		.on("click", function() {
 			var path = [];
+			// var charIcon = L.icon({
+			// 	iconUrl: "./css/headshots/sansa_stark_icon1.png"
+			// });
 			// Also set all their family markers at their starting position
 			var c_path = vis.menuPanel.character_paths[vis.houseName][vis.name];
 			for (var i = 0; i < c_path.length; i++) {

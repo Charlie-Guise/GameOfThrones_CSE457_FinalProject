@@ -98,7 +98,7 @@ HousePanel.prototype.updateVis = function(){
 			.attr('x', function(d, index){
 				return 45 + 155 * index;
 			})
-			.attr('y', 155)	
+			.attr('y', 155)
 			.attr('class', 'character-name');
 	//Add the images of the different family members
 	vis.movingPath = {};

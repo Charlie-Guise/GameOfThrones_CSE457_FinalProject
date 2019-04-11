@@ -87,7 +87,7 @@ MenuPanel.prototype.update = function() {
 				d3.select("#menuPanelId").style("display", "none");
 				d3.select("#comparePanelId").style("display", "inline");
 
-				vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData);
+				vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);
 			});
 	vis.svg.selectAll('.compare-text')
 		.remove().exit()
@@ -178,13 +178,13 @@ MenuPanel.prototype.update = function() {
 		})
 		.attr("x", function(d, i){
 			if((i%3) == 0){
-				return 70;
+				return 145;
 			}
 			if((i%3) == 1){
-				return 320;
+				return 395;
 			}
 			if((i%3) == 2){
-				return 570;
+				return 645;
 			}
 		})
 		.attr("y", function(d, i){
@@ -201,6 +201,7 @@ MenuPanel.prototype.update = function() {
 				return 695;
 			}
 		})
+		.style("text-anchor", "middle")
 		.style("font-size", 18)
 		.style("font-family", 'Game of Thrones');
 };
@@ -217,5 +218,6 @@ function renderPopup(currentBattle){
 	var defender_size = currentBattle.defender_size;
 	var attacker_outcome = currentBattle.attacker_outcome;
 	var winner = (attacker_outcome == "win") ? attacker : defender;
+
 	return "<strong>" + name + "</strong><br>Attacker: " + attacker + "<br>Attacking Commander: " + attacker_commander + "<br>Attacking Army Size: "+ attacker_size + "<br>Defender: " + defender + "<br>Defending Commander: " + defender_commander + "<br>Defending Army Size: " + attacker_size + "<br>Battle Winner: " + winner;
 }

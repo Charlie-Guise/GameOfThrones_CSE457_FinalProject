@@ -1,8 +1,8 @@
-/*
+[]/*
  *  This file will create all the visualizations related to a single
  *	house. It will overlay the menuPanel
  */
-function ComparePanel(battles, houses, people, battlesRawData){
+function ComparePanel(battles, houses, people, battlesRawData, menuPanel){
 	var vis = this;
 	vis.houses = houses;
 	vis.people = people;
@@ -10,6 +10,7 @@ function ComparePanel(battles, houses, people, battlesRawData){
 	vis.houseNames = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
 	vis.houseBattleNames = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Rayder", "Tully"];
 	vis.battlesRawData = battlesRawData;
+	vis.menuPanel = menuPanel;``
 	vis.init();
 }
 
@@ -54,55 +55,55 @@ ComparePanel.prototype.init = function(){
 
 ComparePanel.prototype.wrangleData = function(){
 	var vis = this;
-	vis.foes = [{
-		"None": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+	vis.friendBattles = [{
+		"None": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Lannister": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Lannister": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Targaryen": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Targaryen": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Greyjoy": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Greyjoy": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Baratheon": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Baratheon": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Night's Watch": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Night's Watch": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Arryn": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Arryn": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Stark": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Stark": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Tyrell": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Tyrell": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Martell": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Martell": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Rayder": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Rayder": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Tully": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Tully": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}];
-	vis.friends = [{
-		"None": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+	vis.foeBattles = [{
+		"None": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Lannister": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Lannister": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Targaryen": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Targaryen": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Greyjoy": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Greyjoy": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Baratheon": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Baratheon": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Night's Watch": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Night's Watch": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Arryn": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Arryn": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Stark": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Stark": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Tyrell": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Tyrell": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Martell": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Martell": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Rayder": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Rayder": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}, {
-		"Tully": [{"None": 0}, {"Lannister": 0}, {"Targaryen": 0}, {"Greyjoy": 0}, {"Baratheon": 0}, {"Night's Watch": 0}, {"Arryn": 0}, {"Stark":0}, {"Tyrell": 0}, {"Martell":0}, {"Rayder": 0}, {"Tully": 0}]
+		"Tully": [{"None": {"count": 0, "battles": []}}, {"Lannister": {"count": 0, "battles": []}}, {"Targaryen": {"count": 0, "battles": []}}, {"Greyjoy": {"count": 0, "battles": []}}, {"Baratheon": {"count": 0, "battles": []}}, {"Night's Watch": {"count": 0, "battles": []}}, {"Arryn": {"count": 0, "battles": []}}, {"Stark":{"count": 0, "battles": []}}, {"Tyrell": {"count": 0, "battles": []}}, {"Martell":{"count": 0, "battles": []}}, {"Rayder": {"count": 0, "battles": []}}, {"Tully": {"count": 0, "battles": []}}]
 	}];
 
 	for (var i = 0; i < vis.battlesRawData.length; ++i){
@@ -114,16 +115,19 @@ ComparePanel.prototype.wrangleData = function(){
 				var otherPresent = fought(other, vis.battlesRawData[i]);
 				if (mainPresent != 0 && otherPresent != 0 && main != other){
 					if (mainPresent == otherPresent){
-						vis.friends[j][main][k][other] += 1;
+						vis.friendBattles[j][main][k][other].battles.push(vis.battlesRawData[i]);
+						vis.friendBattles[j][main][k][other].count += 1;
 					}
 					else {
-						vis.foes[j][main][k][other] += 1;
+						vis.foeBattles[j][main][k][other].battles.push(vis.battlesRawData[i]);
+						vis.foeBattles[j][main][k][other].count += 1;
 					}
 				}
 			}
 		}
 	}
-
+	console.log(vis.foeBattles);
+	console.log(vis.friendBattles);
 	vis.updateVis();
 }
 
@@ -199,6 +203,9 @@ ComparePanel.prototype.updateVis = function(){
 						.on("end", function(){
 							d3.select("#foe-matrix").style("display", "none");
 						});
+					if(vis.foeRelationLayerGroup != null){
+						vis.foeRelationLayerGroup.clearLayers();
+					}
 
 					// FIXME: slowly move in the new chart
 					vis.svg.select("#deathBarChart")
@@ -354,11 +361,11 @@ ComparePanel.prototype.updateVis = function(){
 		.domain([0, 19])
 		.range([12, 17]);
 
-	for (var i = 0; i < vis.foes.length; ++i){
+	for (var i = 0; i < vis.foeBattles.length; ++i){
 		var tempFoe = '.foe-circle-' + i;
 		foeMatrix.selectAll(tempFoe)
 			.remove().exit()
-			.data(vis.foes[i][vis.houseBattleNames[i]]).enter()
+			.data(vis.foeBattles[i][vis.houseBattleNames[i]]).enter() // FIXME: Making changes
 			.append('circle')
 				.attr('class', function(){
 					return 'foe-circle-'  + i;
@@ -370,27 +377,70 @@ ComparePanel.prototype.updateVis = function(){
 					return 180 + i * 40;
 				})
 				.attr('r', function(d, index){
-					var val = d[vis.houseBattleNames[index]];
-					if (val != 0){
-						return circleScale(val);
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count != 0){
+						return circleScale(curHouse.count);
 					}
 					else {
 						return 7;
 					}
 				})
 				.attr('fill', function(d, index){
-					var val = d[vis.houseBattleNames[index]];
-					if (val == 0){
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count == 0){
 						return 'black';
 					}
 					else {
 						return 'red';
 					}
+				})
+				.style("cursor", "pointer")
+				.on("click", function(d, index){
+					// vis.foeRelationLayerGroup = {};
+					if(vis.foeRelationLayerGroup != null){
+						vis.foeRelationLayerGroup.clearLayers();
+					}
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count != 0){
+						// if there are relations I want to update the map
+						// with markers where the interactions occured
+						vis.foeRelationLayerGroup = L.layerGroup().addTo(vis.menuPanel.map.map);
+						var icon = L.icon({
+							iconUrl: 'css/images/sword.png',
+							iconSize: [15, 30], // size of the icon
+						});
+						for(var i = 0; i < curHouse.battles.length; i++) {
+							var currentLat = parseFloat(curHouse.battles[i].lat);
+							var currentLong = parseFloat(curHouse.battles[i].long);
+							vis.relationMarker = new L.marker([currentLat,currentLong], {icon: icon})
+											.addTo(vis.foeRelationLayerGroup);
+						}
+
+					}
+				})
+				.on("mouseover", function(d, i) {
+					var curHouse = d[vis.houseBattleNames[i]];
+					if (curHouse.count != 0){
+						d3.select(this).transition()
+							.ease(d3.easeElastic)
+							.duration("500")
+							.attr("r", 23);
+					}
+				})
+				.on("mouseout", function(d, i) {
+					var curHouse = d[vis.houseBattleNames[i]];
+					if (curHouse.count != 0){
+						d3.select(this).transition()
+							.ease(d3.easeQuad)
+							.delay("100")
+							.duration("200")
+							.attr("r", circleScale(curHouse.count));
+					}
 				});
 		var tempFriend = '.friend-circle-' + i;
 		friendMatrix.selectAll(tempFriend)
 			.remove().exit()
-			.data(vis.friends[i][vis.houseBattleNames[i]]).enter()
+			.data(vis.friendBattles[i][vis.houseBattleNames[i]]).enter()
 			.append('circle')
 				.attr('class', function(){
 					return 'friend-circle-'  + i;
@@ -402,21 +452,64 @@ ComparePanel.prototype.updateVis = function(){
 					return 180 + i * 40;
 				})
 				.attr('r', function(d, index){
-					var val = d[vis.houseBattleNames[index]];
-					if (val != 0){
-						return circleScale(val);
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count != 0){
+						return circleScale(curHouse.count);
 					}
 					else {
 						return 7;
 					}
 				})
 				.attr('fill', function(d, index){
-					var val = d[vis.houseBattleNames[index]];
-					if (val == 0){
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count == 0){
 						return 'white';
 					}
 					else {
 						return 'blue';
+					}
+				})
+				.style("cursor", "pointer")
+				.on("click", function(d, index){
+					// vis.foeRelationLayerGroup = {};
+					if(vis.friendRelationLayerGroup != null){
+						vis.friendRelationLayerGroup.clearLayers();
+					}
+					var curHouse = d[vis.houseBattleNames[index]];
+					if (curHouse.count != 0){
+						// if there are relations I want to update the map
+						// with markers where the interactions occured
+						vis.friendRelationLayerGroup = L.layerGroup().addTo(vis.menuPanel.map.map);
+						var icon = L.icon({
+							iconUrl: 'css/images/sword.png',
+							iconSize: [15, 30], // size of the icon
+						});
+						for(var i = 0; i < curHouse.battles.length; i++) {
+							var currentLat = parseFloat(curHouse.battles[i].lat);
+							var currentLong = parseFloat(curHouse.battles[i].long);
+							vis.relationMarker = new L.marker([currentLat,currentLong], {icon: icon})
+											.addTo(vis.friendRelationLayerGroup);
+						}
+
+					}
+				})
+				.on("mouseover", function(d, i) {
+					var curHouse = d[vis.houseBattleNames[i]];
+					if (curHouse.count != 0){
+						d3.select(this).transition()
+							.ease(d3.easeElastic)
+							.duration("500")
+							.attr("r", 23);
+					}
+				})
+				.on("mouseout", function(d, i) {
+					var curHouse = d[vis.houseBattleNames[i]];
+					if (curHouse.count != 0){
+						d3.select(this).transition()
+							.ease(d3.easeQuad)
+							.delay("100")
+							.duration("200")
+							.attr("r", circleScale(curHouse.count));
 					}
 				});
 	}
@@ -470,5 +563,8 @@ ComparePanel.prototype.updateVis = function(){
 			});
 	d3.select("#foe-matrix").style("display", "none");
 	d3.select("#friend-matrix").style("display", "none");
+}
 
+function battleSummary(battle){
+	// Here is where I configure the battle summary that goes in the marker popup
 }
