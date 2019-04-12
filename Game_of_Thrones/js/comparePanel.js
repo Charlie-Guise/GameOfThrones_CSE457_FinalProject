@@ -251,7 +251,9 @@ ComparePanel.prototype.updateVis = function(){
 						.on("end", function(){
 							d3.select("#friend-matrix").style("display", "none");
 						});
-
+						if(vis.friendRelationLayerGroup != null){
+							vis.friendRelationLayerGroup.clearLayers();
+						}
 					// FIXME: slowly move in the new chart
 					vis.svg.select("#foe-matrix")
 						.transition()
@@ -327,7 +329,9 @@ ComparePanel.prototype.updateVis = function(){
 						.on("end", function(){
 							d3.select("#foe-matrix").style("display", "none");
 						});
-
+						if(vis.foeRelationLayerGroup != null){
+							vis.foeRelationLayerGroup.clearLayers();
+						}
 					// FIXME: slowly move in the new chart
 					vis.svg.select("#friend-matrix")
 						.transition()
@@ -353,6 +357,24 @@ ComparePanel.prototype.updateVis = function(){
 
 	// The Bar Chart
 	var barchart = vis.svg.append("g").attr("id", "deathBarChart");
+	barchart.append("text").text("Number of Deaths For Each Family")
+			.attr("x", 135)
+			.attr("y", 200)
+			.style("font-size", 25)
+			.style("font-family", "Game of Thrones");
+	barchart.selectAll('.barchart-x-label')
+		.remove().exit()
+		.data(vis.houseNames).enter()
+		.append('text')
+			.attr('class', 'barchart-x-label')
+			.text(function(d){
+				return d;
+			})
+			.attr('y', 775)
+			.attr('x', function(d, index){
+				return 70 + index * 50;
+			})
+			.style("font-size", 13);
 	barchart.selectAll('.death-rect')
 		.remove().exit()
 		.data(vis.houses).enter()
@@ -393,7 +415,16 @@ ComparePanel.prototype.updateVis = function(){
 	var circleScale = d3.scaleLinear()
 		.domain([0, 19])
 		.range([12, 17]);
-
+	foeMatrix.append("text").text("Families Who Fought Against Each Other")
+			.attr("x", 35)
+			.attr("y", 175)
+			.style("font-size", 17)
+			.style("font-family", "Game of Thrones");
+	friendMatrix.append("text").text("Families Who Fought With Each Other")
+			.attr("x", 35)
+			.attr("y", 175)
+			.style("font-size", 17)
+			.style("font-family", "Game of Thrones");
 	for (var i = 0; i < vis.foeBattles.length; ++i){
 		var tempFoe = '.foe-circle-' + i;
 		foeMatrix.selectAll(tempFoe)
@@ -407,7 +438,7 @@ ComparePanel.prototype.updateVis = function(){
 					return 150 + index * 50;
 				})
 				.attr('cy', function(){
-					return 180 + i * 40;
+					return 200 + i * 40;
 				})
 				.attr('r', function(d, index){
 					var curHouse = d[vis.houseBattleNames[index]];
@@ -439,8 +470,8 @@ ComparePanel.prototype.updateVis = function(){
 						// with markers where the interactions occured
 						vis.foeRelationLayerGroup = L.layerGroup().addTo(vis.menuPanel.map.map);
 						var icon = L.icon({
-							iconUrl: 'css/images/sword.png',
-							iconSize: [15, 30], // size of the icon
+							iconUrl: 'css/images/foe.png',
+							iconSize: [30, 30], // size of the icon
 						});
 						for(var i = 0; i < curHouse.battles.length; i++) {
 							var currentLat = parseFloat(curHouse.battles[i].lat);
@@ -482,7 +513,7 @@ ComparePanel.prototype.updateVis = function(){
 					return 150 + index * 50;
 				})
 				.attr('cy', function(){
-					return 180 + i * 40;
+					return 200 + i * 40;
 				})
 				.attr('r', function(d, index){
 					var curHouse = d[vis.houseBattleNames[index]];
@@ -514,8 +545,8 @@ ComparePanel.prototype.updateVis = function(){
 						// with markers where the interactions occured
 						vis.friendRelationLayerGroup = L.layerGroup().addTo(vis.menuPanel.map.map);
 						var icon = L.icon({
-							iconUrl: 'css/images/sword.png',
-							iconSize: [15, 30], // size of the icon
+							iconUrl: 'css/images/friend.png',
+							iconSize: [30, 30], // size of the icon
 						});
 						for(var i = 0; i < curHouse.battles.length; i++) {
 							var currentLat = parseFloat(curHouse.battles[i].lat);
@@ -556,8 +587,10 @@ ComparePanel.prototype.updateVis = function(){
 			})
 			.attr('x', 110)
 			.attr('y', function(d, index){
-				return 180 + index * 40;
-			});
+				return 205 + index * 40;
+			})
+			.style("font-size", 12);
+
 	friendMatrix.selectAll('.friend-y-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
@@ -568,8 +601,10 @@ ComparePanel.prototype.updateVis = function(){
 			})
 			.attr('x', 110)
 			.attr('y', function(d, index){
-				return 180 + index * 40;
-			});
+				return 205 + index * 40;
+			})
+			.style("font-size", 12);
+
 	foeMatrix.selectAll('.foe-x-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
@@ -578,10 +613,11 @@ ComparePanel.prototype.updateVis = function(){
 			.text(function(d){
 				return d;
 			})
-			.attr('y', 650)
+			.attr('y', 660)
 			.attr('x', function(d, index){
 				return 150 + index * 50;
-			});
+			})
+			.style("font-size", 13);
 	friendMatrix.selectAll('.friend-x-label')
 		.remove().exit()
 		.data(vis.houseNames).enter()
@@ -590,10 +626,11 @@ ComparePanel.prototype.updateVis = function(){
 			.text(function(d){
 				return d;
 			})
-			.attr('y', 650)
+			.attr('y', 660)
 			.attr('x', function(d, index){
 				return 150 + index * 50;
-			});
+			})
+			.style("font-size", 13);
 	d3.select("#foe-matrix").style("display", "none");
 	d3.select("#friend-matrix").style("display", "none");
 }

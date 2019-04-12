@@ -98,7 +98,8 @@ Character.prototype.createVis = function() {
 		.text("Follow this Character")
 		.attr("x", 250)
 		.attr("y", 360)
-		.attr("fill", "#e85d5d")
+		.attr("fill", "#b90e0e")
+		.style("cursor", "pointer")
 		.style("font-size", 22)
 		.style("text-decoration", "underline")
 		.style("font-family", "Game of Thrones")
@@ -137,6 +138,12 @@ Character.prototype.createVis = function() {
 			vis.movingPath.bindPopup("Start or Pause");
 			vis.movingPath.openPopup();
 			prevPath = vis.name;
+		})
+		.on("mouseover", function(){
+			d3.select(this).style("font-size", 30);
+		})
+		.on("mouseout", function(){
+			d3.select(this).style("font-size", 22);
 		});
 
 	// Next, we want to hav the gauge that shows their percentage likelihood of death (PLOD)
@@ -195,11 +202,18 @@ Character.prototype.createVis = function() {
 		.text("Will they Survive?")
 		.attr("x", 300)
 		.attr("y", 475)
-		.attr("fill", "#e85d5d")
+		.attr("fill", "#b90e0e")
+		.style("cursor", "pointer")
 		.style("font-size", 22)
 		.style("text-decoration", "underline")
 		.style("font-family", "Game of Thrones")
-		.on("click", startTransition);
+		.on("click", startTransition)
+		.on("mouseover", function(){
+			d3.select(this).style("font-size", 30);
+		})
+		.on("mouseout", function(){
+			d3.select(this).style("font-size", 22);
+		});
 	vis.survivalTraits.append("text")
 		.text(feastOfCrows)
 		.attr("x", 375)

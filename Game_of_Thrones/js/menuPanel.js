@@ -151,8 +151,8 @@ MenuPanel.prototype.update = function() {
 				var currentName = (sigils[i] == "NightsWatch") ? "Night's Watch" : sigils[i];
 				var currentBattles = vis.houseBattles[i][currentName];
 				var icon = L.icon({
-					iconUrl: 'css/images/sword.png',
-					iconSize: [15, 30], // size of the icon
+					iconUrl: 'css/images/knight.png',
+					iconSize: [30, 30], // size of the icon
 				});
 				vis.battleLayerGroup = L.layerGroup().addTo(vis.map.map);
 				vis.characterPathLayerGroup = L.layerGroup().addTo(vis.map.map);

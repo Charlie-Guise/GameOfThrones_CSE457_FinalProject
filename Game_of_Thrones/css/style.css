@@ -55,6 +55,9 @@ body {
 	display: none;
 }
 
+.exit:hover {
+	font-size: 40px;
+}
 
 
 .popup {
@@ -175,6 +178,12 @@ body {
 }
 
 .friend-x-label {
+	font-family: 'Game of Thrones';
+	font-size: 10px;
+	text-orientation: upright;
+	writing-mode: vertical-rl;
+}
+.barchart-x-label {
 	font-family: 'Game of Thrones';
 	font-size: 10px;
 	text-orientation: upright;
