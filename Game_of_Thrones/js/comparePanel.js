@@ -50,6 +50,8 @@ ComparePanel.prototype.init = function(){
 			.attr('x', 200)
 			.attr('y', 50)
 			.attr('class', 'compare-title');
+
+
 	vis.wrangleData();
 }
 
@@ -188,6 +190,7 @@ ComparePanel.prototype.updateVis = function(){
 	var deathChartVisible = true;
 	var foeMatrixVisible = false;
 	var friendMatrixVisible = false;
+
 
 	//toggle buttons
 	vis.svg.append("rect").attr("id", "toggleLeft")
@@ -374,12 +377,15 @@ ComparePanel.prototype.updateVis = function(){
 			.on("mouseover", function(){
 				d3.select(this).style("opacity", 1);
 				//Add a tooltip with all the information about a family
+				// tip.show();
 			})
 			.on("mouseout", function(){
 				d3.select(this).style("opacity", 0.75);
+				// tip.hide();
 			});
 
 	barchart.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(yAxisDeath);
+
 
 	// The friend/foe matrix
 	var foeMatrix = vis.svg.append("g").attr("id", "foe-matrix");

@@ -143,6 +143,7 @@ MenuPanel.prototype.update = function() {
 			})
 			.attr("width", 150)
 			.attr("height", 115)
+			.style("cursor", "pointer")
 			.on('click', function(d, i){
 				d3.select("#menuPanelId").style("display", "none");
 				d3.select("#housePanelId").style("display", "inline");
@@ -164,6 +165,21 @@ MenuPanel.prototype.update = function() {
 									.addTo(vis.battleLayerGroup);
 				}
 				vis.housePanel = new HousePanel(d, currentName, vis);
+			})
+			.on("mouseover", function() {
+				d3.select(this).transition()
+					.ease(d3.easeElastic)
+					.duration("500")
+					.attr("width", 175)
+					.attr("height", 115);
+
+			})
+			.on("mouseout", function() {
+				d3.select(this).transition()
+					.ease(d3.easeElastic)
+					.duration("500")
+					.attr("width", 150)
+					.attr("height", 115);
 			});
 
 		sigilGroup.selectAll("text").remove().exit().data(vis.houses).enter()

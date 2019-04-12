@@ -129,6 +129,7 @@ HousePanel.prototype.updateVis = function(){
 			return 150;
 		})
 		.attr("fill", "white")
+		.style("cursor", "pointer")
 		.on("click", function(name) {
 			console.log(vis);
 			var prediction = {};
@@ -143,7 +144,42 @@ HousePanel.prototype.updateVis = function(){
 
 			d3.select("#housePanelId").style("display", "none");
 			d3.select("#characterPanelId").style("display", "inline");
-		});
+		})
+		.on("mouseover", function() {
+			d3.select(this).transition()
+				.ease(d3.easeElastic)
+				.duration("500")
+				.attr("width", function(d){
+					if(familyImages[vis.houseName].length <= 3){
+						return 225;
+					}
+					return 175;
+				})
+				.attr("height", function(d) {
+					if(familyImages[vis.houseName].length <= 3){
+						return 225;
+					}
+					return 175;
+				});
+
+		})
+		.on("mouseout", function() {
+			d3.select(this).transition()
+				.ease(d3.easeElastic)
+				.duration("500")
+				.attr("width", function(d){
+					if(familyImages[vis.houseName].length <= 3){
+						return 200;
+					}
+					return 150;
+				})
+				.attr("height", function(d) {
+					if(familyImages[vis.houseName].length <= 3){
+						return 200;
+					}
+					return 150;
+				});
+		})
 
 	var deathScale = d3.scaleLinear()
 						.domain([0, d3.max(vis.deathCount)])
