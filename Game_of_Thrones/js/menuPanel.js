@@ -73,25 +73,39 @@ MenuPanel.prototype.update = function() {
 
 	vis.svg.selectAll('.compare-sigil')
 		.remove().exit()
-		.data(['Compare']).enter()
+		.data(['Summary', 'Compare']).enter()
 		.append('image')
 			.attr("xlink:href", function(d){
 				return "./css/houseSigils/" + d + ".jpg";
 			})
 			.attr("width", 150)
 			.attr("height", 115)
-			.attr("x", 320)
+			.attr("x", function(d, index){
+				if(index == 0){
+					return 250;
+				}
+				else {
+					return 390;
+				}
+			})
 			.attr("y", 100)
 			.attr("class", "compare-sigil")
 			.on("click", function(d, i){
-				d3.select("#menuPanelId").style("display", "none");
-				d3.select("#comparePanelId").style("display", "inline");
-
-				vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);
+				if(d == 'Summary'){
+					console.log("TEST");
+					d3.select("#menuPanelId").style("display", "none");
+					d3.select("#summaryPanelId").style("display", "inline");
+					vis.summaryPanel = new SummaryPanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);
+				}
+				else {
+					d3.select("#menuPanelId").style("display", "none");
+					d3.select("#comparePanelId").style("display", "inline");
+					vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);
+				}
 			});
 	vis.svg.selectAll('.compare-text')
 		.remove().exit()
-		.data(["Who is", "the best?"]).enter()
+		.data(["Summary", "Compare"]).enter()
 		.append('text')
 			.text(function(d){
 				return d;
@@ -99,10 +113,10 @@ MenuPanel.prototype.update = function() {
 			.attr('class', 'compare-text')
 			.attr('x', function(d, index){
 				if (index == 0){
-					return 250;
+					return 160;
 				}
 				else {
-					return 470;
+					return 530;
 				}
 			})
 			.attr('y', 150)
