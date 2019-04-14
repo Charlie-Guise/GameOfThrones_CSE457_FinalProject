@@ -92,7 +92,6 @@ MenuPanel.prototype.update = function() {
 			.attr("class", "compare-sigil")
 			.on("click", function(d, i){
 				if(d == 'Summary'){
-					console.log("TEST");
 					d3.select("#menuPanelId").style("display", "none");
 					d3.select("#summaryPanelId").style("display", "inline");
 					vis.summaryPanel = new SummaryPanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);

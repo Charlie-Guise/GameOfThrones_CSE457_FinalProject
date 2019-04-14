@@ -189,3 +189,16 @@ body {
 	text-orientation: upright;
 	writing-mode: vertical-rl;
 }
+
+.sigil-text {
+	font-family: 'Game of Thrones';
+	font-size: 12px;
+}
+.sigil-border {
+	border: 10px solid blue;
+}
+
+.chart-title {
+	font-family: 'Game of Thrones';
+	font-size: 15px;
+}
