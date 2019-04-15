@@ -4,6 +4,20 @@ function Character(name, houseName, prediction, menuPanel) {
 	vis.houseName = houseName;
 	vis.prediction = prediction;
 	vis.menuPanel = menuPanel;
+	vis.colorScheme = {
+		"None": "#c15c1e",
+		"Lannister": "#87090a",
+		"Targaryen": "#a9171f",
+		"Greyjoy": "#372e11",
+		"Baratheon": "#fecf03",
+		"Night's Watch": "#383838",
+		"Arryn":"#111a29",
+		"Stark": "#747474",
+		"Tyrell": "#8da17e",
+		"Martell": "#f08639",
+		"Wildling": "#baedf8",
+		"Tully": "#21224e"
+	};
 	vis.init();
 }
 
@@ -121,7 +135,7 @@ Character.prototype.createVis = function() {
 			}
 			vis.movingPath = new L.Marker.movingMarker(path, 10000).addTo(vis.menuPanel.map.map);
 			vis.trail = L.polyline(path, {
-				color: 'red'
+				color: vis.colorScheme[vis.houseName]
 			}).addTo(vis.menuPanel.map.map);
 			vis.movingPath.once('click', function() {
 				vis.movingPath.start();
@@ -181,7 +195,9 @@ Character.prototype.createVis = function() {
 		.attr("text-anchor", "middle")
 		.attr("dy", ".35em")
 		.style("font-size", 80)
-		.style("font-family", "Game of Thrones");
+		.style("font-family", "Game of Thrones"); //FIXME: Add the tooltip to this so hovering shows the attributes that contribute
+		// .on("mouseover", tip.show)
+		// .on("mouseout", tip.hide);
 
 
 
@@ -274,8 +290,8 @@ Character.prototype.createVis = function() {
 			})
 			.duration(1000)
 			.attr("x", 200)
-			.style("fill-opacity", 1e-6)
-			.remove();
+			.style("fill-opacity", 1e-6);
+			// .remove();
 		d3.selectAll("#fore")
 		.datum({
 			endAngle: 0
@@ -285,6 +301,12 @@ Character.prototype.createVis = function() {
 		.transition()
 		.duration(5000)
 		.attrTween("d", arcTween(percentage * tau));
+
+		d3.selectAll("#gauge")
+			.transition()
+			.delay(5500)
+			.duration(1500)
+			.attr("transform", "translate(" + 400 + "," + 675 + ")");
 	}
 
 }

@@ -49,8 +49,8 @@ GameOfThronesMap.prototype.addKingdoms = function(geojson) {
 	vis.layers.kingdom = L.geoJSON(geojson, {
 		// Set layer style
 		color: '#222',
-		weight: 1,
-		opacity: 0.65,
+		weight: 0.5,
+		opacity: 0.45,
 		onEachFeature: vis.onEachKingdom.bind(vis)
 	}).addTo(vis.map);
 };
@@ -81,17 +81,17 @@ GameOfThronesMap.prototype.onEachKingdom = function(feature, layer) {
 	// console.log("layer: " +layer);
 	// console.log(feature);
 	//bind click
-	layer.on({
-		// click: whenClicked
-		click: (e) => {
-			const kingdom = feature.properties.kingdom;
-			// console.log(kingdom);
-			vis.setHighlightedRegion(layer);
-			// toggleMenuFromMap(kingdom);
-			// FIXME: Then I need to update what's on the menu screen(?)
-			vis.menuPanel = new MenuPanel("menuPanelId", vis.houses, kingdom);
-		}
-	});
+	// layer.on({
+	// 	// click: whenClicked
+	// 	click: (e) => {
+	// 		const kingdom = feature.properties.kingdom;
+	// 		// console.log(kingdom);
+	// 		// vis.setHighlightedRegion(layer);
+	// 		// toggleMenuFromMap(kingdom);
+	// 		// FIXME: Then I need to update what's on the menu screen(?)
+	// 		vis.menuPanel = new MenuPanel("menuPanelId", vis.houses, kingdom);
+	// 	}
+	// });
 };
 
 

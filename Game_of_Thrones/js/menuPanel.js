@@ -16,10 +16,10 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map, battl
 		{"Greyjoy": ["Theon Greyjoy", "Yara Greyjoy", "Euron Greyjoy"]},
 		{"Baratheon": ["Robert Baratheon", "Stannis Baratheon", "Renly Baratheon"]},
 		{"Night's Watch": ["Jon Snow"]},
-		{"Arryn": []},
+		{"Arryn": ["Petyr Baelish"]},
 		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Robb Stark", "Arya Stark"]},
 		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]}, // Don't have location data on these people
-		{"Martell": []},
+		{"Martell": ["Oberyn Martell"]},
 		{"Wildling": ["Mance Rayder", "Tormund Giantsbane"]},// Don't have location data on these people
 		{"Tully": ["Catelyn Stark"]}
 
@@ -27,7 +27,20 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map, battl
 	d3.json("data/game-of-thrones/character_paths.json", function(data) {
 		vis.character_paths = data;
 	})
-
+	vis.houseTerritory = {
+		"None": null,
+		"Lannister": "The Westerlands",
+		"Targaryen": "Crownsland",
+		"Greyjoy": "The Iron Islands",
+		"Baratheon": "Stormlands",
+		"Night's Watch": "Gift",
+		"Arryn": "The Vale",
+		"Stark": "The North",
+		"Tyrell": "The Reach",
+		"Martell": "Dorne",
+		"Wilding": null,
+		"Tully": "Riverlands"
+	}
 	vis.map = map;
 	vis.init();
 };
@@ -67,7 +80,7 @@ MenuPanel.prototype.wrangleData = function() {
 
 MenuPanel.prototype.update = function() {
 	var vis = this;
-	vis.svg.append("text").text("Houses of Westeros").attr("x", 100).attr("y", 75).style("font-size", 48).style("font-family", "Game of Thrones");
+	vis.svg.append("text").text("The 12 Powers of Westeros").attr("x", 85).attr("y", 75).style("font-size", 40).style("font-family", "Game of Thrones");
 	var sigilGroup = vis.svg.append("g").attr("class", "sigils");
 	var sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
 
@@ -177,7 +190,20 @@ MenuPanel.prototype.update = function() {
 									.bindPopup(renderPopup(currentBattles[i]))
 									.addTo(vis.battleLayerGroup);
 				}
-				vis.housePanel = new HousePanel(d, currentName, vis);
+
+				// Highlight the map
+				var mapLayerKeys = Object.keys(vis.map.layers.kingdom._layers);
+				var layer = {};
+				for(var i = 0; i<mapLayerKeys.length; i++) {
+					var layerKingdom = vis.map.layers.kingdom._layers[mapLayerKeys[i]].feature.properties.kingdom;
+    				if(layerKingdom == vis.houseTerritory[currentName]){
+						layer = vis.map.layers.kingdom._layers[mapLayerKeys[i]];
+						vis.map.setHighlightedRegion(vis.map.layers.kingdom._layers[mapLayerKeys[i]]);
+					}
+				}
+
+
+				vis.housePanel = new HousePanel(d, currentName, vis, layer);
 			})
 			.on("mouseover", function() {
 				d3.select(this).transition()
