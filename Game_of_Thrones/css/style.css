@@ -203,3 +203,10 @@ body {
 	font-family: 'Game of Thrones';
 	font-size: 15px;
 }
+
+.x-axis-label {
+	font-family: 'Game of Thrones';
+	font-size: 9px;
+	text-orientation: upright;
+	writing-mode: vertical-rl;
+}

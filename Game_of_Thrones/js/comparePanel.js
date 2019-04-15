@@ -2,12 +2,13 @@ function ComparePanel(battles, houses, people, battlesRawData, menuPanel){
 	console.log(houses);
     var self = this;
     self.battles = battles;
-    self.battlesRawData = self.battlesRawData;
+    self.battlesRawData = battlesRawData;
     self.houses = houses;
     self.people = people;
 	self.menuPanel = menuPanel;
 	self.sigils = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "NightsWatch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
 	self.houseNames = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Wildling", "Tully"];
+	self.battleNames = ["None", "Lannister", "Targaryen", "Greyjoy", "Baratheon", "Night's Watch", "Arryn", "Stark", "Tyrell", "Martell", "Rayder", "Tully"];
 	self.colorScheme = {
 		"None": "#c15c1e",
 		"Lannister": "#87090a",
@@ -22,6 +23,22 @@ function ComparePanel(battles, houses, people, battlesRawData, menuPanel){
 		"Wildling": "#baedf8",
 		"Tully": "#21224e"
 	};
+	self.battlesWon = [
+		{ "None": [{ "count": 0, "battles":[] }] },
+		{ "Lannister": [{ "count": 0, "battles":[] }] },
+		{ "Targaryen": [{ "count": 0, "battles":[] }] },
+		{ "Greyjoy": [{ "count": 0, "battles":[] }] },
+		{ "Baratheon": [{ "count": 0, "battles":[] }] },
+		{ "Night's Watch": [{ "count": 0, "battles":[] }] },
+		{ "Arryn": [{ "count": 0, "battles":[] }] },
+		{ "Stark": [{ "count": 0, "battles":[] }] },
+		{ "Tyrell": [{ "count": 0, "battles":[] }] },
+		{ "Martell": [{ "count": 0, "battles":[] }] },
+		{ "Wildling": [{ "count": 0, "battles":[] }] },
+		{ "Tully": [{ "count": 0, "battles":[] }] },
+
+
+	]
 	self.compareHouse = [];
 	self.deathChart = false;
 	self.survivalChart = false;
@@ -200,8 +217,59 @@ ComparePanel.prototype.init = function(){
 
 ComparePanel.prototype.wrangleData = function(){
 	var self = this;
-
+	for (var i = 0; i < self.battleNames.length; ++i){
+		for (var j = 0; j < self.battlesRawData.length; ++j){
+			var house = self.battleNames[i];
+			var battle = self.battlesRawData[j];
+			var attacker = houseAttacker(house, battle);
+			var defender = houseDefender(house, battle);
+			var win = self.battlesRawData[j].attacker_outcome;
+			if (attacker == true && win =='win'){
+				self.battlesWon[i][self.houseNames[i]][0]["count"] += 1;
+				self.battlesWon[i][self.houseNames[i]][0]['battles'].push(battle);
+			} 
+			if (defender == true && win == 'loss'){
+				self.battlesWon[i][self.houseNames[i]][0]["count"] += 1;
+				self.battlesWon[i][self.houseNames[i]][0]['battles'].push(battle);
+			}
+		}
+	}
 	self.updateVis();
+}
+
+function houseAttacker(name, battle) {
+	if (battle.attacker_1.includes(name)) {
+		return true;
+	} else if (battle.attacker_2.includes(name)) {
+		return true;
+	} else if (battle.attacker_3.includes(name)) {
+		return true;
+	} else if (battle.attacker_4.includes(name)) {
+		return true;
+	} else if (battle.attacker_commander.includes(name)) {
+		return true;
+	} else if (battle.attacker_king.includes(name)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function houseDefender(name, battle) {
+	if (battle.defender_1.includes(name)) {
+		return true;
+	} else if (battle.defender_2.includes(name)) {
+		return true;
+	} else if (battle.defender_3.includes(name)) {
+		return true;
+	} else if (battle.defender_4.includes(name)) {
+		return true;
+	} else if (battle.defender_commander.includes(name)) {
+		return true;
+	} else if (battle.defender_king.includes(name)) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 ComparePanel.prototype.updateVis = function(){
@@ -273,10 +341,24 @@ ComparePanel.prototype.updateVis = function(){
 			}
 		});
 		
+	// X-axis labels
+	self.svg.selectAll('.x-axis-label')
+		.remove().exit()
+		.data(self.compareHouse).enter()
+		.append('text')
+			.attr('class', 'x-axis-label')
+			.attr('x', function(d, index){
+				return 75 + 60 * index;
+			})
+			.attr('y', 710)
+			.text(function(d, index){
+				return d;
+			});
+
 	// Battle Chart
 	var battleScale = d3.scaleLinear()
 		.domain([0, 30])
-		.range([449, 0]);
+		.range([349, 0]);
 	var yAxisBattle = d3.axisLeft().scale(battleScale);
 	var battleChart = d3.select('#battle-chart');	
 	battleChart.append('text')
@@ -289,7 +371,7 @@ ComparePanel.prototype.updateVis = function(){
 		.data(self.compareHouse).enter()
 		.append('rect')
 			.attr('class', 'battle-rect')
-			.attr('width', 50)
+			.attr('width', 25)
 			.attr('height', function(d, index){
 				var loc = 0;
 				for (var i = 0; i < self.houseNames.length; ++i){
@@ -298,7 +380,7 @@ ComparePanel.prototype.updateVis = function(){
 					}
 				}
 				var value = self.battles[loc][d].length;
-				return 450 - battleScale(value);
+				return 350 - battleScale(value);
 			})
 			.attr('x', function(d, index){
 				return 50 + 60 * index;
@@ -311,7 +393,7 @@ ComparePanel.prototype.updateVis = function(){
 					}
 				}
 				var value = self.battles[loc][d].length;
-				return 800 - (450 - battleScale(value));
+				return 700 - (350 - battleScale(value));
 			})
 			.attr('fill', function(d){
 				return self.colorScheme[d];
@@ -321,12 +403,12 @@ ComparePanel.prototype.updateVis = function(){
 	
 	// Death Chart
 	var deathScale = d3.scaleLinear()
-		.domain([0, 30])
-		.range([449, 0]);
+		.domain([0, 253])
+		.range([349, 0]);
 	var yAxisDeath = d3.axisLeft().scale(deathScale);
 	var deathChart = d3.select('#death-chart');
 	deathChart.append('text')
-		.text('Who lost the fewest soldiers?')
+		.text('Who lost the most soldiers?')
 		.attr('x', 275)
 		.attr('y', 275)
 		.attr('class', 'chart-title');
@@ -343,8 +425,9 @@ ComparePanel.prototype.updateVis = function(){
 						loc = i;
 					}
 				}
-				var value = self.battles[loc][d].length;
-				return 450 - deathScale(value);
+				var value = self.houses[loc][d].length;
+				console.log("Death: " + value);
+				return 350 - deathScale(value);
 			})
 			.attr('x', function(d, index){
 				return 50 + 60 * index;
@@ -356,8 +439,8 @@ ComparePanel.prototype.updateVis = function(){
 						loc = i;
 					}
 				}
-				var value = self.battles[loc][d].length;
-				return 800 - (450 - deathScale(value));
+				var value = self.houses[loc][d].length;
+				return 700 - (350 - deathScale(value));
 			})
 			.attr('fill', function(d){
 				return self.colorScheme[d];
@@ -367,7 +450,7 @@ ComparePanel.prototype.updateVis = function(){
 	// Survival Chart
 	var survivalScale = d3.scaleLinear()
 		.domain([0, 100])
-		.range([449, 0]);
+		.range([349, 0]);
 	var yAxisSurvival = d3.axisLeft().scale(survivalScale);
 	var survivalChart = d3.select('#survival-chart');
 	survivalChart.append('text')
@@ -389,7 +472,7 @@ ComparePanel.prototype.updateVis = function(){
 					}
 				}
 				var value = self.battles[loc][d].length;
-				return survivalScale(value);
+				return 350 - survivalScale(value);
 			})
 			.attr('x', function(d, index){
 				return 50 + 60 * index;
@@ -402,7 +485,7 @@ ComparePanel.prototype.updateVis = function(){
 					}
 				}
 				var value = self.battles[loc][d].length;
-				return 800 - (450 - survivalScale(value));
+				return 700 - (350 - survivalScale(value));
 			})
 			.attr('fill', function(d){
 				return self.colorScheme[d];
