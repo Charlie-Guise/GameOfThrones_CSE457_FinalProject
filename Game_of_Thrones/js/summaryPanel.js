@@ -188,7 +188,6 @@ SummaryPanel.prototype.updateVis = function(){
 	var deathChartVisible = true;
 	var foeMatrixVisible = false;
 	var friendMatrixVisible = false;
-
 	//toggle buttons
 	vis.svg.append("rect").attr("id", "toggleLeft")
 		.attr("x", 275)
@@ -354,19 +353,6 @@ SummaryPanel.prototype.updateVis = function(){
 		.style("font-size", 15)
 		.style("font-family", "Game of Thrones");
 
-	/* Initialize tooltip */
-	var tip = d3.tip().attr('class', 'd3-tip')
-					.direction('n')
-					.offset(function() {
-						return [0,0];
-					})
-					.html(function(d) {
-						console.log(d);
-						return "<p>Test</p>";
-					 });
-
-	 /* Invoke the tip in the context of your visualization */
- 	vis.svg.call(tip);
 	// The Bar Chart
 	var barchart = vis.svg.append("g").attr("id", "deathBarChart");
 	barchart.append("text").text("Number of Deaths For Each Family")
@@ -384,9 +370,9 @@ SummaryPanel.prototype.updateVis = function(){
 			})
 			.attr('y', 775)
 			.attr('x', function(d, index){
-				return 70 + index * 50;
+				return 75 + index * 60;
 			})
-			.style("font-size", 13);
+			.style("font-size", 10);
 	barchart.selectAll('.death-rect')
 		.remove().exit()
 		.data(vis.houses).enter()
@@ -411,13 +397,11 @@ SummaryPanel.prototype.updateVis = function(){
 			.on("mouseover", function(d){
 				d3.select(this).style("opacity", 1);
 				//Add a tooltip with all the information about a family
-				tip.show();
 			})
 			.on("mouseout", function(d){
 				d3.select(this).style("opacity", 0.75);
-				tip.hide();
 			});
-
+	/* Invoke the tip in the context of your visualization */
 	barchart.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(yAxisDeath);
 
 
@@ -647,7 +631,7 @@ SummaryPanel.prototype.updateVis = function(){
 			.style("font-size", 13);
 	d3.select("#foe-matrix").style("display", "none");
 	d3.select("#friend-matrix").style("display", "none");
-}
+};
 
 function renderPopup(currentBattle){
 	// FIXME: Make this look better lol
