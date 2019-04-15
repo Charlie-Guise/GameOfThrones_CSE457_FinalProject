@@ -287,11 +287,17 @@ ComparePanel.prototype.updateVis = function(){
 			.attr('width', 45)
 			.attr('height', 35)
 			.attr('x', function(d, index){
-				if((index % 2)== 0){
-					return (index * 160) / 2;
+				if (index == 0 || index == 2 || index == 4){
+					return (index / 2) * 135;
 				}
-				else {
-					return ((index - 1) * 160) / 2
+				else if (index == 1 || index == 3 || index == 5){
+					return ((index - 1)/2) * 135;
+				}
+				else if (index == 7 || index == 9 || index == 11){
+					return (((index - 3)/2) * 135) + 160;
+				}
+				else if (index == 6 || index == 8 || index == 10){
+					return (((index - 2)/2) * 135) + 160;
 				}
 			})
 			.attr('y', function(d, index){
@@ -325,11 +331,17 @@ ComparePanel.prototype.updateVis = function(){
 		})
 		.attr('class', 'sigil-text')
 		.attr('x', function(d, index){
-			if((index % 2)== 0){
-				return 45 + (index * 160) / 2;
+			if (index == 0 || index == 2 || index == 4){
+				return (index / 2) * 135 + 45;
 			}
-			else {
-				return ((index - 1) * 160) / 2 + 45
+			else if (index == 1 || index == 3 || index == 5){
+				return ((index - 1)/2) * 135  + 45;
+			}
+			else if (index == 7 || index == 9 || index == 11){
+				return (((index - 3)/2) * 135) + 205;
+			}
+			else if (index == 6 || index == 8 || index == 10){
+				return (((index - 2)/2) * 135) + 205;
 			}
 		})
 		.attr('y', function(d, index){
