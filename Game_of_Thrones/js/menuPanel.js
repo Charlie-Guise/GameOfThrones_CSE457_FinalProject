@@ -10,12 +10,12 @@ function MenuPanel(parentElement, houses, houseBattles, currentHouse, map, battl
 	vis.currentHouse = currentHouse;
 	vis.battlesRawData = battles;
 	vis.houseMain = [
-		{"None": ["Davos Seaworth", "Samwell Tarly"]},
+		{"None": ["Davos Seaworth"]},
 		{"Lannister": ["Joffrey Baratheon", "Cersei Lannister", "Tywin Lannister", "Tyrion Lannister", "Jaime Lannister"]},
 		{"Targaryen": ["Daenerys Targaryen"]},
 		{"Greyjoy": ["Theon Greyjoy", "Yara Greyjoy", "Euron Greyjoy"]},
 		{"Baratheon": ["Robert Baratheon", "Stannis Baratheon", "Renly Baratheon"]},
-		{"Night's Watch": ["Jon Snow"]},
+		{"Night's Watch": ["Jon Snow", "Samwell Tarly"]},
 		{"Arryn": ["Petyr Baelish"]},
 		{"Stark": ["Jon Snow", "Sansa Stark", "Bran Stark", "Robb Stark", "Arya Stark"]},
 		{"Tyrell": ["Margaery Tyrell", "Loras Tyrell", "Olenna Tyrell"]}, // Don't have location data on these people
@@ -114,10 +114,26 @@ MenuPanel.prototype.update = function() {
 					d3.select("#comparePanelId").style("display", "inline");
 					vis.comparePanel = new ComparePanel(vis.houseBattles, vis.houses, vis.houseMain, vis.battlesRawData, vis);
 				}
+			})
+			.style("cursor", "pointer")
+			.on("mouseover", function() {
+				d3.select(this).transition()
+					.ease(d3.easeElastic)
+					.duration("500")
+					.attr("width", 175)
+					.attr("height", 115);
+
+			})
+			.on("mouseout", function() {
+				d3.select(this).transition()
+					.ease(d3.easeElastic)
+					.duration("500")
+					.attr("width", 150)
+					.attr("height", 115);
 			});
 	vis.svg.selectAll('.compare-text')
 		.remove().exit()
-		.data(["Summary", "Compare"]).enter()
+		.data(["Summary", "Compare Houses"]).enter()
 		.append('text')
 			.text(function(d){
 				return d;
@@ -187,7 +203,7 @@ MenuPanel.prototype.update = function() {
 					var currentLat = parseFloat(currentBattles[i].lat);
 					var currentLong = parseFloat(currentBattles[i].long);
 					vis.battleMarker = new L.marker([currentLat,currentLong], {icon: icon})
-									.bindPopup(renderPopup(currentBattles[i]))
+									.bindPopup(renderPopup(currentBattles[i])) // Add custom style
 									.addTo(vis.battleLayerGroup);
 				}
 
@@ -269,10 +285,11 @@ function renderPopup(currentBattle){
 	var attacker_commander = currentBattle.attacker_commander;
 	var defender_commander = currentBattle.defender_commander;
 	var region = currentBattle.region;
-	var attacker_size = currentBattle.attacker_size;
-	var defender_size = currentBattle.defender_size;
+	var attacker_size = (currentBattle.attacker_size > 0) ? (currentBattle.attacker_size + " soldiers") : "Unknown";
+	var defender_size = (currentBattle.defender_size > 0) ? (currentBattle.defender_size + " soldiers") : "Unknown";
 	var attacker_outcome = currentBattle.attacker_outcome;
 	var winner = (attacker_outcome == "win") ? attacker : defender;
+	var year = currentBattle.year;
+	return "<h3 style='text-align:center'><strong>" + name + "<h4>" + year + " A.C.</h4></strong></h3><h4 style='text-align:center'>" + attacker + "<span><strong> vs. </strong></span>" +  defender + "</h4><p>Attacking Commander(s): "+ attacker_commander + "</p><p>Defending Commander(s): "+ defender_commander + "</p><h4 style='text-align:center'>" + attacker_size + "<span><strong> vs. </strong></span>" +  defender_size + "</h4><h4 style='text-align:center; font-size: 24px'><strong'>Battle Victor</strong><br>" + winner + "</h4>";
 
-	return "<strong>" + name + "</strong><br>Attacker: " + attacker + "<br>Attacking Commander: " + attacker_commander + "<br>Attacking Army Size: "+ attacker_size + "<br>Defender: " + defender + "<br>Defending Commander: " + defender_commander + "<br>Defending Army Size: " + attacker_size + "<br>Battle Winner: " + winner;
 }

@@ -130,29 +130,35 @@ function createHouses(deaths, battles) {
 			var include = 0;
 			if (battles[j].attacker_1.includes(house)) {
 				include = 1;
-			} else if (battles[j].attacker_2.includes(house)) {
-				include = 1;
-			} else if (battles[j].attacker_3.includes(house)) {
-				include = 1;
-			} else if (battles[j].attacker_4.includes(house)) {
-				include = 1;
-			} else if (battles[j].attacker_commander.includes(house)) {
-				include = 1;
-			} else if (battles[j].attacker_king.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_1.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_2.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_3.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_4.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_commander.includes(house)) {
-				include = 1;
-			} else if (battles[j].defender_king.includes(house)) {
+			}
+			if (battles[j].defender_1.includes(house)) {
 				include = 1;
 			}
+			// if (battles[j].attacker_1.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].attacker_2.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].attacker_3.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].attacker_4.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].attacker_commander.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].attacker_king.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_1.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_2.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_3.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_4.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_commander.includes(house)) {
+			// 	include = 1;
+			// } else if (battles[j].defender_king.includes(house)) {
+			// 	include = 1;
+			// }
 
 			if (battles[j].defender_king == "Mance Rayder" && house == "Mance") {
 				house = "Wildling";

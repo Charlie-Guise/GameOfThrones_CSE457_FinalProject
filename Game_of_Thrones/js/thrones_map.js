@@ -13,6 +13,20 @@ function GameOfThronesMap(parentElement, battles, deaths, predictions, menuPanel
 	vis.predictions = predictions;
 	vis.menuPanel = menuPanel;
 	vis.houses = houses;
+	vis.colorScheme = {
+		"None": "#c15c1e",
+		"The Westerlands": "#87090a",
+		"Crownsland": "#a9171f",
+		"The Iron Islands": "#372e11",
+		"Stormlands": "#fecf03",
+		"Gift": "#383838",
+		"The Vale":"#111a29",
+		"The North": "#747474",
+		"The Reach": "#8da17e",
+		"Dorne": "#f08639",
+		"Wilding": "#baedf8",
+		"Riverlands": "#21224e"
+	};
 	vis.init();
 };
 
@@ -48,16 +62,16 @@ GameOfThronesMap.prototype.addKingdoms = function(geojson) {
 	var vis = this;
 	vis.layers.kingdom = L.geoJSON(geojson, {
 		// Set layer style
-		color: '#222',
-		weight: 0.5,
-		opacity: 0.45,
+		color: '#494949',
+		weight: 0.7,
+		opacity: 0.65,
 		onEachFeature: vis.onEachKingdom.bind(vis)
 	}).addTo(vis.map);
 };
 
 GameOfThronesMap.prototype.setHighlightedRegion = function(layer) {
 	var vis = this;
-	// console.log(vis);
+	console.log(vis);
 	// console.log("layer: " + layer);
 	if (vis.selected) { // if there is a highlighed region, unhighlight it
 		vis.layers.kingdom.resetStyle(vis.selected);
@@ -70,9 +84,10 @@ GameOfThronesMap.prototype.setHighlightedRegion = function(layer) {
 	}
 
 	vis.prevKingdom = layer;
+	var currentKingdom = vis.selected.feature.properties.kingdom;
 	if (vis.selected) {
 		vis.selected.bringToFront();
-		vis.selected.setStyle({color: 'blue'});
+		vis.selected.setStyle({color: vis.colorScheme[currentKingdom], weight: 2, opacity: 1});
 	}
 };
 
