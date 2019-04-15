@@ -1,4 +1,4 @@
-[]/*
+/*
  *  This file will create all the visualizations related to a single
  *	house. It will overlay the menuPanel
  */
@@ -189,7 +189,6 @@ SummaryPanel.prototype.updateVis = function(){
 	var foeMatrixVisible = false;
 	var friendMatrixVisible = false;
 
-
 	//toggle buttons
 	vis.svg.append("rect").attr("id", "toggleLeft")
 		.attr("x", 275)
@@ -197,6 +196,7 @@ SummaryPanel.prototype.updateVis = function(){
 		.attr("width", 75)
 		.attr("height",30)
 		.attr("fill", "black")
+		.attr("cursor", "pointer")
 		.on("click", function(){
 			console.log("Toggle Left");
 			// Can't more left anymore
@@ -258,7 +258,13 @@ SummaryPanel.prototype.updateVis = function(){
 				}
 			}
 
-		});
+		})
+		.on("mouseover", function(){
+			d3.select(this).attr("width", 100).attr("height", 35);
+		})
+		.on("mouseout", function(){
+			d3.select(this).attr("width", 75).attr("height", 30);
+		});;
 	vis.svg.append("text").text("prev")
 		.attr("x", 290)
 		.attr("y", 123)
@@ -268,12 +274,14 @@ SummaryPanel.prototype.updateVis = function(){
 		.style("font-size", 15)
 		.style("font-family", "Game of Thrones");
 
+
 	vis.svg.append("rect").attr("id", "toggleRight")
 		.attr("x", 500)
 		.attr("y", 100)
 		.attr("width", 75)
 		.attr("height", 30)
 		.attr("fill", "black")
+		.attr("cursor", "pointer")
 		.on("click", function(){
 			// Can't move right anymore
 			if(friendMatrixVisible){
@@ -330,6 +338,12 @@ SummaryPanel.prototype.updateVis = function(){
 				}
 			}
 
+		})
+		.on("mouseover", function(){
+			d3.select(this).attr("width", 100).attr("height", 35);
+		})
+		.on("mouseout", function(){
+			d3.select(this).attr("width", 75).attr("height", 30);
 		});
 	vis.svg.append("text").text("next")
 		.attr("x", 513)
@@ -340,6 +354,19 @@ SummaryPanel.prototype.updateVis = function(){
 		.style("font-size", 15)
 		.style("font-family", "Game of Thrones");
 
+	/* Initialize tooltip */
+	var tip = d3.tip().attr('class', 'd3-tip')
+					.direction('n')
+					.offset(function() {
+						return [0,0];
+					})
+					.html(function(d) {
+						console.log(d);
+						return "<p>Test</p>";
+					 });
+
+	 /* Invoke the tip in the context of your visualization */
+ 	vis.svg.call(tip);
 	// The Bar Chart
 	var barchart = vis.svg.append("g").attr("id", "deathBarChart");
 	barchart.append("text").text("Number of Deaths For Each Family")
@@ -381,14 +408,14 @@ SummaryPanel.prototype.updateVis = function(){
 				return color;
 			})
 			.style("opacity", 0.75)
-			.on("mouseover", function(){
+			.on("mouseover", function(d){
 				d3.select(this).style("opacity", 1);
 				//Add a tooltip with all the information about a family
-				// tip.show();
+				tip.show();
 			})
-			.on("mouseout", function(){
+			.on("mouseout", function(d){
 				d3.select(this).style("opacity", 0.75);
-				// tip.hide();
+				tip.hide();
 			});
 
 	barchart.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(yAxisDeath);
@@ -401,14 +428,14 @@ SummaryPanel.prototype.updateVis = function(){
 		.domain([0, 19])
 		.range([12, 17]);
 	foeMatrix.append("text").text("Families Who Fought Against Each Other")
-			.attr("x", 35)
-			.attr("y", 175)
-			.style("font-size", 17)
+			.attr("x", 150)
+			.attr("y", 170)
+			.style("font-size", 20)
 			.style("font-family", "Game of Thrones");
 	friendMatrix.append("text").text("Families Who Fought With Each Other")
-			.attr("x", 35)
-			.attr("y", 175)
-			.style("font-size", 17)
+			.attr("x", 150)
+			.attr("y", 170)
+			.style("font-size", 20)
 			.style("font-family", "Game of Thrones");
 	for (var i = 0; i < vis.foeBattles.length; ++i){
 		var tempFoe = '.foe-circle-' + i;
@@ -462,6 +489,7 @@ SummaryPanel.prototype.updateVis = function(){
 							var currentLat = parseFloat(curHouse.battles[i].lat);
 							var currentLong = parseFloat(curHouse.battles[i].long);
 							vis.relationMarker = new L.marker([currentLat,currentLong], {icon: icon})
+											.bindPopup(renderPopup(curHouse.battles[i]))
 											.addTo(vis.foeRelationLayerGroup);
 						}
 
@@ -537,6 +565,7 @@ SummaryPanel.prototype.updateVis = function(){
 							var currentLat = parseFloat(curHouse.battles[i].lat);
 							var currentLong = parseFloat(curHouse.battles[i].long);
 							vis.relationMarker = new L.marker([currentLat,currentLong], {icon: icon})
+											.bindPopup(renderPopup(curHouse.battles[i]))
 											.addTo(vis.friendRelationLayerGroup);
 						}
 
@@ -620,6 +649,19 @@ SummaryPanel.prototype.updateVis = function(){
 	d3.select("#friend-matrix").style("display", "none");
 }
 
-function battleSummary(battle){
-	// Here is where I configure the battle summary that goes in the marker popup
+function renderPopup(currentBattle){
+	// FIXME: Make this look better lol
+	var name = currentBattle.name;
+	var attacker = currentBattle.attacker_1;
+	var defender = currentBattle.defender_1;
+	var attacker_commander = currentBattle.attacker_commander;
+	var defender_commander = currentBattle.defender_commander;
+	var region = currentBattle.region;
+	var attacker_size = (currentBattle.attacker_size > 0) ? (currentBattle.attacker_size + " soldiers") : "Unknown";
+	var defender_size = (currentBattle.defender_size > 0) ? (currentBattle.defender_size + " soldiers") : "Unknown";
+	var attacker_outcome = currentBattle.attacker_outcome;
+	var winner = (attacker_outcome == "win") ? attacker : defender;
+	var year = currentBattle.year;
+	return "<h3 style='text-align:center'><strong>" + name + "<h4>" + year + " A.C.</h4></strong></h3><h4 style='text-align:center'>" + attacker + "<span><strong> vs. </strong></span>" +  defender + "</h4><p>Attacking Commander(s): "+ attacker_commander + "</p><p>Defending Commander(s): "+ defender_commander + "</p><h4 style='text-align:center'>" + attacker_size + "<span><strong> vs. </strong></span>" +  defender_size + "</h4><h4 style='text-align:center; font-size: 24px'><strong'>Battle Victor</strong><br>" + winner + "</h4>";
+
 }
